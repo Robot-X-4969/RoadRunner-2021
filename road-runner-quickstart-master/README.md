@@ -1,3 +1,11 @@
+# Robot-X / Roadrunner 2020 Combo Code
+
+*This is the code for FTC team 4969 Robot X's 2020 season.*
+
+Unlike the 2019-2020 code, this project repository has removed certain unused programs as well as merged with the quickstart of Roadrunner in order to speed up integration between the two. 
+
+# ------------------------------------------------------------------
+
 # Road Runner Quickstart
 
 An example FTC project using [Road Runner](https://github.com/acmerobotics/road-runner). **Note:** Road Runner is in alpha and many of its APIs are incubating.
@@ -18,4 +26,4 @@ For more detailed instructions on getting Road Runner setup in your own project,
 
 ## Documentation
 
-Check out the new [online quickstart documentation](https://acme-robotics.gitbook.io/road-runner/quickstart).
+Check out the new [online quickstart documentation](https://acme-robotics.gitbook.io/road-runner/quickstart
