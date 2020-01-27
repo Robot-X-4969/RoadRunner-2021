@@ -50,9 +50,6 @@ public class JebediahNoRgbOp extends XOpMode {
 
         parkingSlide = new ParkingSlide(this);
         activeModules.add(parkingSlide);
-
-
-
     }
 
 }

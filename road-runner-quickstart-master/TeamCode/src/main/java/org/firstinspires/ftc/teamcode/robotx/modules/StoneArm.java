@@ -19,8 +19,7 @@ public class StoneArm extends XModule {
     public Servo clawServo;
     long setTime;
     boolean deploy = false;
-
-
+    
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
 
