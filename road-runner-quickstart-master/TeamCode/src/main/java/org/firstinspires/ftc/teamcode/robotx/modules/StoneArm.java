@@ -76,13 +76,15 @@ public class StoneArm extends XModule {
             stoneArm.setPower(-((xGamepad2().right_trigger - xGamepad2().left_trigger)/1.5));
         }
 
-        if (xGamepad2().a.wasPressed()){
+        /*if (xGamepad2().a.wasPressed()){
             grab();
         }
         if (deploy && timer.seconds() > .5){
             deploy();
             deploy = false;
         }
+
+         */
 
         if(xGamepad2().dpad_left.wasPressed()){
             clawServo.setPosition(0);
@@ -93,6 +95,9 @@ public class StoneArm extends XModule {
         if (xGamepad2().x.wasPressed()){
             toggleClaw();
         }
+
+        //Deploy capstone only if it is 5 seconds until endgame. This prevents accidentally dropping the capstone before endgame
+        //Driver 1 can override timer by pulling both triggers at the same time
         if ((xGamepad2().y.wasPressed() && capstoneTimer.seconds() > 85) || (xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
             clawServo.setPosition(1.0);
         }

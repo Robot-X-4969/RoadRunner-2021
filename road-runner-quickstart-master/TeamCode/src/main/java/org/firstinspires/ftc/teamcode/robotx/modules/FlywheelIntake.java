@@ -83,8 +83,10 @@ public class FlywheelIntake extends XModule {
             jiggle = true;
         }
     public void loop(){
+        //Display intake current power
         opMode.telemetry.addData("Intake Power: ", intakePower);
 
+        //Main statement for setting the intake power
         if (isFlywheelOn && !jiggle){
             if (flyForward){
                 flywheelLeft.setPower(intakePower);
@@ -96,6 +98,7 @@ public class FlywheelIntake extends XModule {
             }
         }
 
+        //Allows for intake power adjustment by using the bumpers
         if (xGamepad2().left_bumper.wasPressed() && intakePower > 0){
             intakePower -= 0.05;
         }
@@ -103,26 +106,23 @@ public class FlywheelIntake extends XModule {
             intakePower += 0.05;
         }
 
-        opMode.telemetry.addData("Stone in robot?", stone);
-
-        /*opMode.telemetry.addData("Red:", intakeColor.red());
-        opMode.telemetry.addData("Blue:", intakeColor.blue());
-        opMode.telemetry.addData("Green:", intakeColor.green());
-         */
+        //Toggle intake in
         if(xGamepad2().dpad_down.wasPressed()) {
             toggleFly();
         }
+
+        //Toggle intake out
         if(xGamepad2().dpad_up.wasPressed()){
             toggleFlyReverse();
         }
 
-        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && flyForward){
-            stone = true;
-        }
-        else {
-            stone = false;
+        //Press b to reverse intake for a small amount of time to right stones
+        if (xGamepad2().b.wasPressed()){
+            jiggleIntake();
         }
 
+        //After time has expired, return intake to original direction
+        //Use boolean to only do this action when we want
         if (jiggle && timer.seconds() > .4){
             flywheelLeft.setPower(intakePower);
             flywheelRight.setPower(intakePower);
@@ -132,13 +132,33 @@ public class FlywheelIntake extends XModule {
             jiggle = false;
         }
 
-        if (xGamepad2().b.wasPressed()){
-            jiggleIntake();
-        }
+
+        //Reset intake power to 0.5 default
         if (xGamepad2().left_stick_button.wasPressed() || xGamepad2().right_stick_button.wasPressed()){
             intakePower = 0.5;
         }
 
+
+        ///////////////////////Color sensing///////////////////////////////////
+
+        opMode.telemetry.addData("Stone in robot?", stone);
+
+        //Test rgb values for REV color sensor
+        /*opMode.telemetry.addData("Red:", intakeColor.red());
+        opMode.telemetry.addData("Blue:", intakeColor.blue());
+        opMode.telemetry.addData("Green:", intakeColor.green());
+         */
+
+        //Set boolean to true if yellow is detected
+        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && flyForward){ //Increase these numbers to reduce range from the sensor
+            stone = true;
+        }
+        else {
+            stone = false;
+        }
+
+        //If there is a stone in the robot, stop the intake
+        //flyForward boolean allows intake to be reversed when there is a stone in the robot
         if (flyForward && stone){
             flywheelLeft.setPower(0.0);
             flywheelRight.setPower(0.0);
@@ -147,16 +167,6 @@ public class FlywheelIntake extends XModule {
             flyForward = false;
             flyBackward = false;
         }
-
-        /*if(clawServo.getPosition() >= 0.05){
-            if(xGamepad2().x.wasPressed()){
-                flywheelLeft.setPower(0);
-                flywheelRight.setPower(0);
-            }
-
-        }
-
-         */
     }
 
 }
