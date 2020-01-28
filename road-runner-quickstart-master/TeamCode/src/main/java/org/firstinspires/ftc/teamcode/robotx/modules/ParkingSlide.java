@@ -37,7 +37,7 @@ public class ParkingSlide extends XModule {
         }
     }
     public void loop(){
-        opMode.telemetry.addData("Elapsed time:", slideTimer.seconds());
+        opMode.telemetry.addData("Elapsed time:", (int)slideTimer.seconds());
 
         if (xGamepad1().x.wasPressed() && slideTimer.seconds() > 90){
             toggleSlide();
