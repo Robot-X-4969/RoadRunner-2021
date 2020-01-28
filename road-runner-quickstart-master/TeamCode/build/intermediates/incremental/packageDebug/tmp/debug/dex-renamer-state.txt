@@ -1,0 +1,16 @@
+#Mon Jan 27 17:56:08 EST 2020
+path.3=classes.dex
+path.2=classes.dex
+path.1=classes.dex
+renamed.4=classes5.dex
+path.0=classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+base.4=C\:\\Users\\Ben Sabo\\Documents\\Robot-X\\Roadrunner 2019-2020\\road-runner-quickstart-master\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+renamed.0=classes.dex
+base.3=C\:\\Users\\Ben Sabo\\Documents\\Robot-X\\Roadrunner 2019-2020\\road-runner-quickstart-master\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\3
+base.2=C\:\\Users\\Ben Sabo\\Documents\\Robot-X\\Roadrunner 2019-2020\\road-runner-quickstart-master\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\2
+base.1=C\:\\Users\\Ben Sabo\\Documents\\Robot-X\\Roadrunner 2019-2020\\road-runner-quickstart-master\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+base.0=C\:\\Users\\Ben Sabo\\Documents\\Robot-X\\Roadrunner 2019-2020\\road-runner-quickstart-master\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.4=classes2.dex
