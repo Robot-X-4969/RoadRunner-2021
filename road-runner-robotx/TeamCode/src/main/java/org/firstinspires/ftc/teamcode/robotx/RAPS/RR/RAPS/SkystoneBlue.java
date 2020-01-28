@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.robotx.RAPS.RR.RAPS;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -126,20 +126,7 @@ public class SkystoneBlue extends LinearOpMode {
 
 
         **/
-        Trajectory path1 = drive.trajectoryBuilder()
-                .strafeLeft(5)
-                .addMarker(0.2, ()->{
-                    flywheelIntake.toggleFly();
-                    return Unit.INSTANCE;
-                })
-                .lineTo(new Vector2d(25,35),
-                        new ConstantInterpolator(Math.toRadians(135)))
-                .lineTo(new Vector2d(10,43))
-                .addMarker(2.7,()->{
-                    flywheelIntake.toggleFly();
-                    return Unit.INSTANCE;
-                })
-                .build();
+
 
         Trajectory path2 = drive.trajectoryBuilder()
                 /*.lineTo(new Vector2d(0,20),
@@ -148,6 +135,20 @@ public class SkystoneBlue extends LinearOpMode {
                 .build();
         stoneArm.stoneArm.setPower(0);
         waitForStart();
+        Trajectory path1 = drive.trajectoryBuilder()
+                .strafeLeft(5)
+                .addMarker(0.2, ()->{
+                    flywheelIntake.toggleFly();
+                    return Unit.INSTANCE;
+                })
+                .lineTo(new Vector2d(10,35),
+                        new ConstantInterpolator(Math.toRadians(135)))
+                // .lineTo(new Vector2d(10,43))
+                .addMarker(2.7,()->{
+                    flywheelIntake.toggleFly();
+                    return Unit.INSTANCE;
+                })
+                .build();
 
         if (isStopRequested()) return;
 
@@ -171,7 +172,7 @@ public class SkystoneBlue extends LinearOpMode {
 
             /////////////////////Movement///////////////////////
 
-            flywheelIntake.flywheelRight.setPower(0.5);
+            flywheelIntake.flywheelRight.setPower(0);
             flywheelIntake.flywheelLeft.setPower(-0.5);
             sleep(1200);
             flywheelIntake.flywheelRight.setPower(0.0);
@@ -189,14 +190,14 @@ public class SkystoneBlue extends LinearOpMode {
 
                 drive.followTrajectorySync(path1);
                 sleep(2000);
-                stoneArm.stoneArm.setPower(0.45);
+                /**stoneArm.stoneArm.setPower(0.45);
                 stoneArm.clawServo.setPosition(0);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(10,32))
                                 .build()
                 );
-                sleep(1000);
+                sleep(1000);**/
 
 
 
