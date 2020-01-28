@@ -133,9 +133,8 @@ public class SkystoneBlue extends LinearOpMode {
                     flywheelIntake.toggleFly();
                     return Unit.INSTANCE;
                 })
-                .lineTo(new Vector2d(25,35),
-                        new ConstantInterpolator(Math.toRadians(135)))
-                .lineTo(new Vector2d(10,43))
+                .lineTo(new Vector2d(21.5,30.5),
+                        new ConstantInterpolator(Math.toRadians(140)))
                 .addMarker(2.7,()->{
                     flywheelIntake.toggleFly();
                     return Unit.INSTANCE;
@@ -149,8 +148,8 @@ public class SkystoneBlue extends LinearOpMode {
                     flywheelIntake.toggleFly();
                     return Unit.INSTANCE;
                 })
-                .lineTo(new Vector2d(25,35),
-                        new ConstantInterpolator(Math.toRadians(135)))
+                .lineTo(new Vector2d(21.5,30.5),
+                        new ConstantInterpolator(Math.toRadians(140)))
                 .build();
         stoneArm.stoneArm.setPower(0);
         waitForStart();
@@ -194,18 +193,25 @@ public class SkystoneBlue extends LinearOpMode {
 
                 /**Go to skystone 1**/
 
-                drive.followTrajectorySync(path2);
+                drive.followTrajectorySync(path1);
                 sleep(2000);
                 //stoneArm.stoneArm.setPower(0.45);
                 //stoneArm.clawServo.setPosition(0);
-                /**
+
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(10,32))
+                                .lineTo(new Vector2d(10,40))
                                 .build()
                 );
-                 **/
-                sleep(5000);
+                sleep(3000);
+                flywheelIntake.toggleFly();
+
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                        .lineTo(new Vector2d(10, 30),
+                                new ConstantInterpolator(Math.toRadians(180)))
+                        .build()
+                );
 
 
 
