@@ -193,7 +193,7 @@ public class SkystoneBlue extends LinearOpMode {
 
                 /**Go to skystone 1**/
 
-                drive.followTrajectorySync(path1);
+                drive.followTrajectorySync(path1); //Move to skystone
                 sleep(2000);
                 //stoneArm.stoneArm.setPower(0.45);
                 //stoneArm.clawServo.setPosition(0);
@@ -202,6 +202,7 @@ public class SkystoneBlue extends LinearOpMode {
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(10,40))
                                 .build()
+                        //Drive forward to pick up skystone
                 );
                 sleep(3000);
                 flywheelIntake.toggleFly();
