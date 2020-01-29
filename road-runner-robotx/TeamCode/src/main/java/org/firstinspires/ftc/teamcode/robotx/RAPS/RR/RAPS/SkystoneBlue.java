@@ -59,6 +59,10 @@ public class SkystoneBlue extends LinearOpMode {
     private final int rows = 1280;
     private final int cols = 720;
 
+    public boolean isLeft = false;
+    public boolean isRight = false;
+    public boolean isCenter = false;
+
 
     OpenCvInternalCamera phoneCam;
     FlywheelIntake flywheelIntake;
@@ -152,6 +156,7 @@ public class SkystoneBlue extends LinearOpMode {
                         new ConstantInterpolator(Math.toRadians(140)))
                 .build();
         stoneArm.stoneArm.setPower(0);
+        telemetry.addLine("Ready!");
         waitForStart();
 
 
@@ -175,6 +180,12 @@ public class SkystoneBlue extends LinearOpMode {
             telemetry.update();
             sleep(100);
 
+
+
+
+
+
+
             /////////////////////Movement///////////////////////
 
             flywheelIntake.flywheelRight.setPower(0);
@@ -182,7 +193,6 @@ public class SkystoneBlue extends LinearOpMode {
             sleep(1200);
             flywheelIntake.flywheelRight.setPower(0.0);
             flywheelIntake.flywheelLeft.setPower(0.0);
-            sleep(1000);
             pins.deployPins();
             stoneArm.clawServo.setPosition(0.4);
 
@@ -190,28 +200,23 @@ public class SkystoneBlue extends LinearOpMode {
             if(valLeft == 0 && valMid >= 1 && valRight >= 1){
                 telemetry.addData("Skystone Position: ", "Left");
                 telemetry.update();
-
+                isLeft = true;
                 /**Go to skystone 1**/
 
                 drive.followTrajectorySync(path1); //Move to skystone
-                sleep(2000);
                 //stoneArm.stoneArm.setPower(0.45);
                 //stoneArm.clawServo.setPosition(0);
-
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(10,40))
+                                .lineTo(new Vector2d(13,40))
+                                .lineTo(new Vector2d(15, 25),
+                                        new ConstantInterpolator(Math.toRadians(180)))
+                                .addMarker(1.6, ()->{
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
                                 .build()
                         //Drive forward to pick up skystone
-                );
-                sleep(3000);
-                flywheelIntake.toggleFly();
-
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                        .lineTo(new Vector2d(10, 30),
-                                new ConstantInterpolator(Math.toRadians(180)))
-                        .build()
                 );
 
 
@@ -224,15 +229,39 @@ public class SkystoneBlue extends LinearOpMode {
             }else if(valLeft >= 1 && valMid >= 1 && valRight == 0){
                 telemetry.addData("Skystone Position: ", "Right");
                 telemetry.update();
+                isRight = true;
+
 
                 /**Collect Skystone 1**/
-
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .back(9)
+                                .addMarker(0.2, ()->{
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .strafeLeft(40)
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .forward(5.5)
+                                .strafeRight(14)
+                                .addMarker(1, ()->{
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .build()
+                );
+                drive.turnSync(Math.toRadians(170));
+                sleep(100);
 
 
 
             }else if(valLeft >= 1 && valMid == 0 && valRight >= 1){
                 telemetry.addData("Skystone Position: ", "center");
                 telemetry.update();
+                isCenter = true;
 
                 /**Collect first skystone**/
 
@@ -242,30 +271,91 @@ public class SkystoneBlue extends LinearOpMode {
             /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(-62,32), new ConstantInterpolator(90))
+                            .lineTo(new Vector2d(-67,31))
                             .build()
             );
-            sleep(100);
+            drive.turnSync(Math.toRadians(80));
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .back(7)
-                            .addMarker(1, ()->{
+                            .back(15)
+                            .addMarker(0.7, ()->{
                                 pins.deployPins();
                                 return Unit.INSTANCE;
                             })
-                            .lineTo(new Vector2d(-62,32), new ConstantInterpolator(Math.toRadians(0)))
+                            .splineTo(new Pose2d(-45,25))
                             .build()
             );
+            pins.deployPins();
+            sleep(200);
+            flywheelIntake.toggleFly();
+
+            /**Go to second skystone**/
+            if(isLeft && isCenter == false && isRight == false) {
+                telemetry.addData("Skystone Position: ", "Left");
+                telemetry.update();
+
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .lineTo(new Vector2d(2, 25))
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                //.splineTo(new Pose2d(20,35,0))
+                                .strafeLeft(11)
+                                .forward(8)
+                                .strafeRight(11)
+                                .addMarker(2, () -> {
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .setReversed(true)
+                                .lineTo(new Vector2d(-20, 25))
+                                .lineTo(new Vector2d(-80, 25))
+                                .build()
+                );
+
+            }else if(isLeft == false && isCenter == false && isRight) {
+                telemetry.addData("Skystone Position: ", "Right");
+                telemetry.update();
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .lineTo(new Vector2d(12.5,25))
+                                .strafeLeft(13)
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .forward(8)
+                                .strafeRight(13)
+                                .addMarker(2, () -> {
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .setReversed(true)
+                                .lineTo(new Vector2d(-20, 25))
+                                .lineTo(new Vector2d(-80, 25))
+                                .build()
+                );
+            }
+
+
+            drive.followTrajectorySync(
+                    drive.trajectoryBuilder()
+                            .lineTo(new Vector2d(-35,25))
+                            .build()
+            );
+
+
+
+
             sleep(10000);
 
 
             /**Place stone on foundation**/
 
 
-            /**Go to second skystone**/
 
-
-            /**Collect Skystone 2**/
 
         }
     }
