@@ -59,8 +59,6 @@ public class SkystoneBlue extends LinearOpMode {
     private final int rows = 1280;
     private final int cols = 720;
 
-    public boolean stoneCollected;
-
 
     OpenCvInternalCamera phoneCam;
     FlywheelIntake flywheelIntake;
@@ -152,7 +150,6 @@ public class SkystoneBlue extends LinearOpMode {
                 })
                 .lineTo(new Vector2d(21.5,30.5),
                         new ConstantInterpolator(Math.toRadians(140)))
-                .lineTo(new Vector2d(10,40))
                 .build();
         stoneArm.stoneArm.setPower(0);
         waitForStart();
@@ -185,7 +182,9 @@ public class SkystoneBlue extends LinearOpMode {
             sleep(1200);
             flywheelIntake.flywheelRight.setPower(0.0);
             flywheelIntake.flywheelLeft.setPower(0.0);
+            sleep(1000);
             pins.deployPins();
+            stoneArm.clawServo.setPosition(0.4);
 
 
             if(valLeft == 0 && valMid >= 1 && valRight >= 1){
@@ -194,25 +193,27 @@ public class SkystoneBlue extends LinearOpMode {
 
                 /**Go to skystone 1**/
 
-                drive.followTrajectorySync(path1);
+                drive.followTrajectorySync(path1); //Move to skystone
+                sleep(2000);
                 //stoneArm.stoneArm.setPower(0.45);
                 //stoneArm.clawServo.setPosition(0);
+
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                /**.addMarker(()->{           ben here is where you can mess with the stuff
-                                    while (stoneCollected = false) {
-                                        if (flywheelIntake.intakeColor.red() >= 1000 && flywheelIntake.intakeColor.green() > 1000)
-                                            stoneCollected = true;
-                                    }
-                                    if(stoneCollected){
-                                        flywheelIntake.toggleFly();
-                                    }
-                                    return Unit.INSTANCE;
-                                })**/
                                 .lineTo(new Vector2d(10,40))
-                                .lineTo(new Vector2d(14, 25),
-                                        new ConstantInterpolator(Math.toRadians(180)))
-                                .build());
+                                .build()
+                        //Drive forward to pick up skystone
+                );
+                sleep(3000);
+                flywheelIntake.toggleFly();
+
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                        .lineTo(new Vector2d(10, 30),
+                                new ConstantInterpolator(Math.toRadians(180)))
+                        .build()
+                );
+
 
 
                 /**Collect Skystone 1**/
@@ -241,11 +242,10 @@ public class SkystoneBlue extends LinearOpMode {
             /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(-62,25))
-                            .lineTo(new Vector2d(-62,40), new ConstantInterpolator(270))
+                            .lineTo(new Vector2d(-62,32), new ConstantInterpolator(90))
                             .build()
             );
-            sleep(10000);
+            sleep(100);
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             .back(7)
