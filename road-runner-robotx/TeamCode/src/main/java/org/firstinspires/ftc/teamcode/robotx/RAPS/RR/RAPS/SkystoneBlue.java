@@ -242,7 +242,7 @@ public class SkystoneBlue extends LinearOpMode {
                 /**Collect Skystone 1**/
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .back(8.5)
+                                .back(7.5)
                                 .addMarker(0.2, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -283,7 +283,7 @@ public class SkystoneBlue extends LinearOpMode {
                 flywheelIntake.toggleFly();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(0,40), new ConstantInterpolator(toRadians(35)))
+                                .lineTo(new Vector2d(-4,36), new ConstantInterpolator(toRadians(35)))
                                 .addMarker(1.9, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -364,13 +364,13 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(12.5,25))
-                                .strafeLeft(16.5)
+                                .strafeLeft(16)
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .forward(8)
-                                .strafeRight(16.5)
+                                .strafeRight(16)
                                 .addMarker(2, () -> {
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -385,13 +385,13 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(6,25), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(10,39), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(1,25), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(6.25,39), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(16,39), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(13,39), new ConstantInterpolator(toRadians(0)))
                                 .addMarker(2, () -> {
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
