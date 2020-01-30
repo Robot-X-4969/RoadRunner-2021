@@ -283,12 +283,12 @@ public class SkystoneBlue extends LinearOpMode {
                 flywheelIntake.toggleFly();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(0,40), new ConstantInterpolator(toRadians(40)))
+                                .lineTo(new Vector2d(0,40), new ConstantInterpolator(toRadians(35)))
                                 .addMarker(1.9, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
-                                .lineTo(new Vector2d(3, 28), new SplineInterpolator(toRadians(45), toRadians(180)))
+                                .lineTo(new Vector2d(3, 28), new SplineInterpolator(toRadians(35), toRadians(180)))
                                 .build()
                 );
 
