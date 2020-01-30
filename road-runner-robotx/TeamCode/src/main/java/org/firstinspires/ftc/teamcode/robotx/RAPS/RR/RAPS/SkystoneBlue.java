@@ -385,8 +385,8 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(7,25), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(12,39), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(6,25), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(10,39), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 drive.followTrajectorySync(
