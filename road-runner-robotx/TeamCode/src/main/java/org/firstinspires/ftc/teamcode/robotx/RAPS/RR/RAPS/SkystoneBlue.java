@@ -33,6 +33,8 @@ import java.util.List;
 
 import kotlin.Unit;
 
+import static java.lang.Math.*;
+
 @Autonomous
 public class SkystoneBlue extends LinearOpMode {
 
@@ -139,7 +141,7 @@ public class SkystoneBlue extends LinearOpMode {
                     return Unit.INSTANCE;
                 })
                 .lineTo(new Vector2d(21.5,30.5),
-                        new ConstantInterpolator(Math.toRadians(140)))
+                        new ConstantInterpolator(toRadians(140)))
                 .addMarker(2.7,()->{
                     flywheelIntake.toggleFly();
                     return Unit.INSTANCE;
@@ -154,7 +156,7 @@ public class SkystoneBlue extends LinearOpMode {
                     return Unit.INSTANCE;
                 })
                 .lineTo(new Vector2d(21.5,30.5),
-                        new ConstantInterpolator(Math.toRadians(140)))
+                        new ConstantInterpolator(toRadians(140)))
                 .build();
         stoneArm.stoneArm.setPower(0);
         telemetry.addLine("Ready!");
@@ -216,7 +218,7 @@ public class SkystoneBlue extends LinearOpMode {
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(13,40))
                                 .lineTo(new Vector2d(15, 25),
-                                        new ConstantInterpolator(Math.toRadians(180)))
+                                        new ConstantInterpolator(toRadians(180)))
                                 .addMarker(1.6, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -258,7 +260,7 @@ public class SkystoneBlue extends LinearOpMode {
                                 })
                                 .build()
                 );
-                drive.turnSync(Math.toRadians(170));
+                drive.turnSync(toRadians(170));
                 sleep(100);
 
 
@@ -275,18 +277,18 @@ public class SkystoneBlue extends LinearOpMode {
                 /**Collect first skystone**/
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-10,30), new ConstantInterpolator(Math.toRadians(30)))
+                                .lineTo(new Vector2d(-10,30), new ConstantInterpolator(toRadians(30)))
                                 .build()
                 );
                 flywheelIntake.toggleFly();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(0,40), new ConstantInterpolator(Math.toRadians(40)))
+                                .lineTo(new Vector2d(0,40), new ConstantInterpolator(toRadians(40)))
                                 .addMarker(1.7, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
-                                .lineTo(new Vector2d(0, 25), new SplineInterpolator(Math.toRadians(45), Math.toRadians(180)))
+                                .lineTo(new Vector2d(0, 25), new SplineInterpolator(toRadians(45), toRadians(180)))
                                 .build()
                 );
 
@@ -302,9 +304,10 @@ public class SkystoneBlue extends LinearOpMode {
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             .lineTo(new Vector2d(-40,31))
-                            .lineTo(new Vector2d(-76,33), new SplineInterpolator(Math.toRadians(180), Math.toRadians(270)))
+                            .lineTo(new Vector2d(-76,33), new SplineInterpolator(toRadians(180), toRadians(270)))
                             .build()
             );
+            flywheelIntake.toggleFlyReverse();
             //drive.turnSync(Math.toRadians(80));
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
@@ -318,6 +321,7 @@ public class SkystoneBlue extends LinearOpMode {
             );
             pins.deployPins();
             sleep(200);
+            flywheelIntake.toggleFlyReverse();
             flywheelIntake.toggleFly();
 
 
@@ -381,13 +385,13 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(0,25), new ConstantInterpolator(Math.toRadians(0)))
-                                .lineTo(new Vector2d(5,39), new ConstantInterpolator(Math.toRadians(0)))
+                                .lineTo(new Vector2d(0,25), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(5,39), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(13,39), new ConstantInterpolator(Math.toRadians(0)))
+                                .lineTo(new Vector2d(13,39), new ConstantInterpolator(toRadians(0)))
                                 .addMarker(2, () -> {
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -407,8 +411,6 @@ public class SkystoneBlue extends LinearOpMode {
                             .lineTo(new Vector2d(-35,25))
                             .build()
             );
-
-
 
 
             sleep(10000);
