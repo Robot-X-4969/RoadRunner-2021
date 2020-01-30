@@ -18,28 +18,26 @@ public class MecanumDriveGyroBased extends XModule {
     public DcMotor backLeft;
     public DcMotor backRight;
 
-    SensorBNO055IMU gyro;
 
     public MecanumDriveGyroBased(OpMode op) {
         super(op);
     }
 
     public void init() {
-        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft = opMode.hardwareMap.dcMotor.get("frontLeft");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight = opMode.hardwareMap.dcMotor.get("frontRight");
+        //frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight = opMode.hardwareMap.dcMotor.get("backRight");
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft = opMode.hardwareMap.dcMotor.get("backLeft");
-
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void loop() {
         float forwardBackAxis = xGamepad1().left_stick_y; //Forward and backwards axis
         float leftRightAxis = xGamepad1().left_stick_x; //Strafing axis
         float spinAxis = -xGamepad1().right_stick_x; //spinning axis
-        gyro.start();
         // Combine the 3 powers to get a power for each motor with Mechanum wheels.
         float FRpower = forwardBackAxis - leftRightAxis + spinAxis;
         float FLpower = forwardBackAxis + leftRightAxis - spinAxis;
@@ -66,10 +64,10 @@ public class MecanumDriveGyroBased extends XModule {
         backLeft.setPower(BLpower);
 
         // Output the encoder positions for each motor for debug.
-        opMode.telemetry.addData("frontRight", frontRight.getCurrentPosition());
-        opMode.telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-        opMode.telemetry.addData("backRight", backRight.getCurrentPosition());
-        opMode.telemetry.addData("backLeft", backLeft.getCurrentPosition());
+        opMode.telemetry.addData("frontRight: ", frontRight.getCurrentPosition());
+        opMode.telemetry.addData("frontLeft: ", frontLeft.getCurrentPosition());
+        opMode.telemetry.addData("backRight: ", backRight.getCurrentPosition());
+        opMode.telemetry.addData("backLeft: ", backLeft.getCurrentPosition());
 
 
     }

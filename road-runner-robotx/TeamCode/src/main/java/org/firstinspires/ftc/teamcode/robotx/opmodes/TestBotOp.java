@@ -10,13 +10,17 @@ import org.firstinspires.ftc.teamcode.robotx.libraries.*;
 public class TestBotOp extends XOpMode {
 
     //MechanumDriveNoLag mechanumDriveNoLag;
-    StoneClaw stoneClaw;
-    ContinuousServoTest continuousServoTest;
-    StoneDetectionColor detection;
+    MecanumDriveGyroBased mecanumDriveGyroBased;
+    //StoneClaw stoneClaw;
+    //ContinuousServoTest continuousServoTest;
+    //StoneDetectionColor detection;
     //TwoWheelAutonIMU twoWheelAutonIMU;
 
     public void initModules(){
         super.initModules();
+
+        mecanumDriveGyroBased = new MecanumDriveGyroBased(this);
+        activeModules.add(mecanumDriveGyroBased);
 
         //mechanumDriveNoLag= new MechanumDriveNoLag(this);
         //activeModules.add(mechanumDriveNoLag);
