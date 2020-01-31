@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.robotx.libraries;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -53,6 +54,8 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
+@Disabled
+
 @Autonomous(name = "Sensor: BNO055 IMU", group = "Sensor")
                             // Comment this out to add to the opmode list
 public class SensorBNO055IMU extends LinearOpMode

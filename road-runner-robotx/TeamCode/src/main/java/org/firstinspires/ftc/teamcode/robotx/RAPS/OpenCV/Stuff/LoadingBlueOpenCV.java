@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotx.RAPS.OpenCV.Stuff;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -22,6 +23,8 @@ import java.util.List;
 import org.firstinspires.ftc.teamcode.robotx.modules.*;
 
 @Autonomous
+@Disabled
+
 public class LoadingBlueOpenCV extends LinearOpMode {
 
     //0 means skystone, 1+ means yellow stone

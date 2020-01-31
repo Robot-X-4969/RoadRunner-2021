@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotx.RAPS.OpenCV.Stuff;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -23,6 +24,8 @@ import org.firstinspires.ftc.teamcode.robotx.modules.*;
 
 
 @Autonomous
+@Disabled
+
 public class LoadingRedOpenCV extends LinearOpMode {
 
     //0 means skystone, 1+ means yellow stone
@@ -63,6 +66,7 @@ public class LoadingRedOpenCV extends LinearOpMode {
     FoundationPins pins;
 
     @Override
+
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
