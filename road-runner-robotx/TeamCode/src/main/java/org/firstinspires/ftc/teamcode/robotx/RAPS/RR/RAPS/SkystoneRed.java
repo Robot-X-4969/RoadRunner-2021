@@ -209,20 +209,24 @@ public class SkystoneRed extends LinearOpMode {
                 /**Collect Skystone 1**/
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(5,40), new SplineInterpolator(toRadians(0), toRadians(180)))
-                                .forward(6)
+                                .strafeLeft(5)
+                                .lineTo(new Vector2d(30,50), new ConstantInterpolator(toRadians(180)))
                                 .addMarker(0.5, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
                                 .build()
                 );
-                flywheelIntake.toggleFly();
                 //stoneArm.stoneArm.setPower(0.45);
                 //stoneArm.clawServo.setPosition(0);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(15,25), new SplineInterpolator(toRadians(180),toRadians(0)))
+                                .forward(5)
+                                .lineTo(new Vector2d(20,25), new SplineInterpolator(toRadians(180),toRadians(0)))
+                                .addMarker(1.5, ()->{
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
                                 .build()
                         //Drive forward to pick up skystone
                 );
@@ -276,23 +280,26 @@ public class SkystoneRed extends LinearOpMode {
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .strafeLeft(5)
-                                .lineTo(new Vector2d(-10,28), new ConstantInterpolator(Math.toRadians(35)))
-                                .addMarker(0.2, ()->{
+                                .lineTo(new Vector2d(35,50), new ConstantInterpolator(toRadians(180)))
+                                .addMarker(0.5, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
                                 .build()
                 );
+                //stoneArm.stoneArm.setPower(0.45);
+                //stoneArm.clawServo.setPosition(0);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .forward(7)
-                                .lineTo(new Vector2d(0,25), new ConstantInterpolator(Math.toRadians(0)))
-                                .addMarker(1, ()->{
+                                .forward(5)
+                                .lineTo(new Vector2d(20,25), new SplineInterpolator(toRadians(180),toRadians(0)))
+                                .addMarker(1.5, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
                                 .build()
-                );
+                        //Drive forward to pick up skystone
+                );;
 
 
             }
@@ -305,8 +312,8 @@ public class SkystoneRed extends LinearOpMode {
             /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(40,28))
-                            .lineTo(new Vector2d(84,33), new SplineInterpolator(toRadians(0), toRadians(-90)))
+                            .lineTo(new Vector2d(60,26))
+                            .lineTo(new Vector2d(86,32), new SplineInterpolator(toRadians(0), toRadians(-90)))
                             .build()
             );
             flywheelIntake.toggleFlyReverse();
@@ -338,19 +345,28 @@ public class SkystoneRed extends LinearOpMode {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(0, 30), new ConstantInterpolator(Math.toRadians(180)))
-                                .splineTo(new Pose2d(-10,40), new ConstantInterpolator(Math.toRadians(180)))
-                                .addMarker(1.3, () -> {
-                                    flywheelIntake.toggleFly();
-                                    return Unit.INSTANCE;
-                                })
-                                .lineTo(new Vector2d(-20,40), new ConstantInterpolator(Math.toRadians(180)))
+                                .lineTo(new Vector2d(5, 30), new ConstantInterpolator(Math.toRadians(180)))
+                                //.splineTo(new Pose2d(15,40), new ConstantInterpolator(Math.toRadians(180)))
+                                //.lineTo(new Vector2d(0,40), new ConstantInterpolator(Math.toRadians(180)))
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
+                                .strafeRight(15.5)
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .forward(5)
                                 //.splineTo(new Pose2d(20,35,0))
                                 .strafeLeft(15)
+                                .addMarker(1.5, () -> {
+                                    flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .setReversed(true)
+                                .lineTo(new Vector2d(60, 35))
+                                .lineTo(new Vector2d(105, 30))
                                 .build()
                 );
 
@@ -384,21 +400,28 @@ public class SkystoneRed extends LinearOpMode {
                 telemetry.update();
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(16,32), new ConstantInterpolator(Math.toRadians(180)))
-                                .lineTo(new Vector2d(12,50), new ConstantInterpolator(Math.toRadians(180)))
+                                .lineTo(new Vector2d(12.5, 30), new ConstantInterpolator(Math.toRadians(180)))
+                                //.splineTo(new Pose2d(15,40), new ConstantInterpolator(Math.toRadians(180)))
+                                //.lineTo(new Vector2d(0,40), new ConstantInterpolator(Math.toRadians(180)))
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .forward(6.5)
-                                .strafeLeft(18)
+                                .strafeRight(15.5)
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .forward(5)
+                                //.splineTo(new Pose2d(20,35,0))
+                                .strafeLeft(15)
                                 .addMarker(1.5, () -> {
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
                                 .lineTo(new Vector2d(60, 35))
-                                .lineTo(new Vector2d(100, 30))
+                                .lineTo(new Vector2d(105, 30))
                                 .build()
                 );
             }
