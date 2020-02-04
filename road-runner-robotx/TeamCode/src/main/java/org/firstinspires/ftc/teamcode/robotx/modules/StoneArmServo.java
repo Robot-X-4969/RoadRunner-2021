@@ -68,16 +68,22 @@ public class StoneArmServo extends XModule {
     }
 
     public void loop () {
-        if (xGamepad2().y.wasPressed()){
+        if (xGamepad2().y.wasPressed() && !isArmUp){ //Raise the arm
             stoneArm.setPosition(armUp);
             isArmUp = true;
         }
-        if (xGamepad2().a.wasPressed() && isArmUp){
+
+        if (xGamepad2().y.wasPressed() && isArmUp){ //If same button is pressed twice, reset arm
+            stoneArm.setPosition(armIn);
+            isArmUp = false;
+        }
+
+        if (xGamepad2().a.wasPressed() && isArmUp){ //Move arm into placing position
             stoneArm.setPosition(armOut);
             isArmUp = false;
             isArmOut = true;
         }
-        if (isArmOut && xGamepad2().a.wasReleased() && stoneArm.getPosition() == armOut){
+        if (isArmOut && xGamepad2().a.wasReleased() && stoneArm.getPosition() == armOut){ //Once the button is released, reset the arm
             returnArm();
         }
         if (timer.seconds() > 0.5 && returning){
