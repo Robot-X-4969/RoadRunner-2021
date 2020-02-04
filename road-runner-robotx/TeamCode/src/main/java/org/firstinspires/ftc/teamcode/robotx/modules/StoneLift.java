@@ -33,10 +33,6 @@ public class StoneLift extends XModule {
         magSwitch.setMode(DigitalChannel.Mode.INPUT);
     }
 
-    public void start(){
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
     /*public void toggleCap(){
         if (capped){
             capServo.setPosition(inPos);
