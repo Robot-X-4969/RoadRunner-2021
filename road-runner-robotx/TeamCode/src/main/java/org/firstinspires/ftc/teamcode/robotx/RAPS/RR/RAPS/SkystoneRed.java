@@ -313,7 +313,7 @@ public class SkystoneRed extends LinearOpMode {
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             .lineTo(new Vector2d(60,26))
-                            .lineTo(new Vector2d(86,32), new SplineInterpolator(toRadians(0), toRadians(-90)))
+                            .lineTo(new Vector2d(88,31), new SplineInterpolator(toRadians(0), toRadians(-90)))
                             .build()
             );
             flywheelIntake.toggleFlyReverse();
