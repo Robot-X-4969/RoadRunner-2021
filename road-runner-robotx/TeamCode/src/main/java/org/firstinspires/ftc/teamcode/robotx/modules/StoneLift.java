@@ -44,6 +44,9 @@ public class StoneLift extends XModule {
         }
     }*/
 
+    public void start(){
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
 
     public void loop() {
@@ -55,6 +58,7 @@ public class StoneLift extends XModule {
         }
 
         opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
+        opMode.telemetry.addData("Lift position:", encoder.getCurrentPosition());
 
         //opMode.telemetry.addData("Motor Power: ", liftMotor.getPower() + xGamepad2().left_stick_y + " Encoder Value: " + encoder.getCurrentPosition());
 
