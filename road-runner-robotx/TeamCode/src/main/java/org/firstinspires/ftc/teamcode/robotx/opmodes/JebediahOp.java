@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.robotx.modules.*;
 import org.firstinspires.ftc.teamcode.robotx.libraries.*;
 
 @TeleOp(name = "JebediahNoRgbOP", group = "Competition")
-public class JebediahNoRgbOp extends XOpMode {
+public class JebediahOp extends XOpMode {
 
     //public StoneClaw stoneClaw;
     public FlywheelIntake flywheelIntake;
