@@ -14,7 +14,6 @@ public class ChooseParkingPosition extends XModule {
     public boolean isLoadingSide = false;
     //Starting Positions
 
-
     public ChooseParkingPosition(OpMode op){super(op);}
 
     public void loop () {
@@ -29,6 +28,7 @@ public class ChooseParkingPosition extends XModule {
             isBuildingSide = true;
 
         }
+
 
     }
 }

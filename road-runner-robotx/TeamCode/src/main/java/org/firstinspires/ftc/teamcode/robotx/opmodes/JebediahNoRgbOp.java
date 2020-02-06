@@ -11,7 +11,7 @@ public class JebediahNoRgbOp extends XOpMode {
     public FlywheelIntake flywheelIntake;
     //CoachDDrive coachDDrive;
     public OrientationDrive orientationDrive;
-    public StoneArm stoneArm;
+    public StoneArmServo stoneArmServo;
     public StoneLift stoneLift;
     public FoundationPins foundationPins;
     //public CapstonePositioning capstonePositioning;
@@ -27,8 +27,8 @@ public class JebediahNoRgbOp extends XOpMode {
         flywheelIntake = new FlywheelIntake(this);
         activeModules.add(flywheelIntake);
 
-        stoneArm = new StoneArm(this);
-        activeModules.add(stoneArm);
+        stoneArmServo = new StoneArmServo(this);
+        activeModules.add(stoneArmServo);
 
         //coachDDrive = new CoachDDrive(this);
         //activeModules.add(coachDDrive);

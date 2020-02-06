@@ -76,6 +76,8 @@ public class StoneLift extends XModule {
             liftMotor.setPower(xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
         }
 
+
+        ///////////////AUTO LIFT FOR STACKING//////////////////
         if (xGamepad2().right_bumper.wasPressed()){
             liftMotor.setTargetPosition(level * stoneHeight);
             liftMotor.setPower(1.0);

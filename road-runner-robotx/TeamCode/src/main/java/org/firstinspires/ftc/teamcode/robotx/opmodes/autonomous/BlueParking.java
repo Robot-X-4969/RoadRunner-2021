@@ -37,7 +37,6 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.robotx.modules.ChooseParkingPosition;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.OrientationDrive;
@@ -64,7 +63,7 @@ public class BlueParking extends LinearOpMode {
     public boolean isCenter;
     public boolean isRight;
 
-
+    
 
 
 
@@ -102,7 +101,6 @@ public class BlueParking extends LinearOpMode {
     StoneClaw stoneClaw;
     StoneLift stoneLift;
     FoundationPins pins;
-    ChooseParkingPosition chooseParkingPosition;
 
 
     @Override
@@ -177,8 +175,7 @@ public class BlueParking extends LinearOpMode {
         stoneLift = new StoneLift(this);
         stoneLift.init();
 
-        chooseParkingPosition = new ChooseParkingPosition(this);
-        chooseParkingPosition.loop();
+
 
 
 
@@ -206,26 +203,14 @@ public class BlueParking extends LinearOpMode {
         waitForStart();
 
 
-        while (opModeIsActive()) {
+        if (opModeIsActive()) {
 
             /////////////////////Movement///////////////////////
-            if(chooseParkingPosition.isBuildingSide){
-                if (chooseParkingPosition.isWall) {
-
-                }else if (chooseParkingPosition.isBridge) {
-                    strafeLeft(1.0,200);
-                }
-
-            }else if(chooseParkingPosition.isLoadingSide){
-                if (chooseParkingPosition.isWall) {
-                    strafeLeft(1.0, 200);
-                }else if (chooseParkingPosition.isBridge) {
-                    strafeLeft(1.0,200);
-            }
             //goForward(1.0,500);
             //sleep(500);
             //strafeLeft(1.0,650);
-            sleep(1000);
+            strafeLeft(1.0,200);
+
 
 
 
