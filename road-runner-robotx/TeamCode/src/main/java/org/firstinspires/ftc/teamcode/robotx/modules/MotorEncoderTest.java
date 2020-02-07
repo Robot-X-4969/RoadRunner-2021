@@ -22,7 +22,7 @@ public class MotorEncoderTest extends XModule {
 
     public void loop(){
         opMode.telemetry.addData("Encoder position:", motorPosition);
-        motorPosition = -liftMotor.getCurrentPosition();
+        motorPosition = -encoder.getCurrentPosition();
 
         liftMotor.setPower(xGamepad1().left_stick_y);
     }

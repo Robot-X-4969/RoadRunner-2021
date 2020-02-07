@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.robotx.modules;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,6 +14,7 @@ import org.firstinspires.ftc.teamcode.robotx.libraries.XModule;
  */
 public class StoneArmServo extends XModule {
 
+    public RevColorSensorV3 intakeColor;
     public Servo stoneArm;
     double armPower;
     boolean deployed = false;
@@ -19,18 +22,20 @@ public class StoneArmServo extends XModule {
     long setTime;
     boolean deploy = false;
 
-    public double armIn = 0.88;
-    public double armOut = 0.04;
-    public double armUp = 0.14;
+    public double armIn = 0.8;
+    public double armOut = 0.0;
+    public double armUp = 0.35;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
     public boolean returning = false;
+    public int level = 3;
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
 
-    public boolean clawOpen = false;
+    public boolean clawOpen = true;
+    public boolean autoClose = false;
 
     public StoneArmServo(OpMode op) {
         super(op);
@@ -42,9 +47,11 @@ public class StoneArmServo extends XModule {
         //stoneArm.setDirection(DcMotorSimple.Direction.REVERSE);
         //stoneArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         clawServo = opMode.hardwareMap.servo.get("clawServo");
-        clawServo.setPosition(0); //Set position to closed
+        clawServo.setPosition(0.28); //Set position to open
         setTime = System.currentTimeMillis();
         stoneArm.setPosition(armIn);
+        intakeColor = opMode.hardwareMap.get(RevColorSensorV3.class, "intakeColor");
+        intakeColor.setI2cAddress(I2cAddr.create7bit(0x52)); //The REV color sensor v3 uses this address
     }
 
     public void toggleClaw(){
@@ -53,27 +60,46 @@ public class StoneArmServo extends XModule {
             clawOpen = false;
         }
         else {
-            clawServo.setPosition(0.3);
+            clawServo.setPosition(0.28);
             clawOpen = true;
         }
     }
 
     public void returnArm(){
         if (isArmOut){
-            clawServo.setPosition(0.3);
+            clawServo.setPosition(0.28);
+            clawOpen = true;
             returning = true;
 
             timer.reset();
         }
     }
+    public void autoCloseClaw(){
+        autoClose = true;
+
+        timer.reset();
+    }
+
+    public void start(){
+        timer.reset();
+    }
 
     public void loop () {
-        if (xGamepad2().y.wasPressed() && !isArmUp){ //Raise the arm
+        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen){
+            stoneArm.setPosition(0.88);
+            autoCloseClaw();
+        }
+        if (autoClose && timer.seconds() > 0.5){
+            clawServo.setPosition(0.0);
+            autoClose = false;
+        }
+
+        if (xGamepad2().right_trigger >= 0.7 && !isArmUp){ //Raise the arm
             stoneArm.setPosition(armUp);
             isArmUp = true;
         }
 
-        if (xGamepad2().y.wasPressed() && isArmUp){ //If same button is pressed twice, reset arm
+        if (xGamepad2().left_trigger >= 0.7 && isArmUp){ //If same button is pressed twice, reset arm
             stoneArm.setPosition(armIn);
             isArmUp = false;
         }
@@ -83,7 +109,7 @@ public class StoneArmServo extends XModule {
             isArmUp = false;
             isArmOut = true;
         }
-        if (isArmOut && xGamepad2().a.wasReleased() && stoneArm.getPosition() == armOut){ //Once the button is released, reset the arm
+        if (isArmOut && xGamepad2().a.wasReleased()){ //Once the button is released, reset the arm
             returnArm();
         }
         if (timer.seconds() > 0.5 && returning){
@@ -102,11 +128,33 @@ public class StoneArmServo extends XModule {
 
          */
 
+        if (xGamepad1().dpad_up.wasPressed()){
+            level++;
+        }
+        else if (xGamepad1().dpad_down.wasPressed() && level >= 4){
+            level--;
+        }
+        if (xGamepad1().dpad_left.wasPressed()){
+            level = 3;
+        }
+        if (xGamepad2().right_bumper.wasPressed()){
+            level++;
+        }
+
+        if (level >= 4){
+            armOut = 0.2;
+        }
+        else {
+            armOut = 0.04;
+        }
+
         if(xGamepad2().dpad_left.wasPressed()){
             clawServo.setPosition(0);
+            clawOpen = false;
         }
         if(xGamepad2().dpad_right.wasPressed()) {
             clawServo.setPosition(0.3);
+            clawOpen = true;
         }
         if (xGamepad2().x.wasPressed()){
             toggleClaw();

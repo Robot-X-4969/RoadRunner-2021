@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robotx.modules;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -12,21 +13,23 @@ public class StoneLift extends XModule {
 
     DcMotor liftMotor;
     DcMotor encoder;
-    public double motorPower = -0.15;
+    public double motorPower = 0.0;
     public DigitalChannel magSwitch;
     public boolean magPressed = true;
     public boolean goingUp = false;
 
-    public int stoneHeight = 200;
+    public int stoneHeight = 370;
 
-    public int level = 3;
+    public int level = 1;
 
     public boolean isAutoLiftMoving = false;
+    public int liftPos;
 
     public void init(){
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         encoder = opMode.hardwareMap.dcMotor.get("flywheelRight");
         //endStop = opMode.hardwareMap.touchSensor.get("endStop");
@@ -47,7 +50,7 @@ public class StoneLift extends XModule {
     }*/
 
     public void start(){
-        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
@@ -59,8 +62,10 @@ public class StoneLift extends XModule {
             magPressed = true;
         }
 
+        liftPos = -encoder.getCurrentPosition();
+
         opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
-        opMode.telemetry.addData("Lift position:", encoder.getCurrentPosition());
+        opMode.telemetry.addData("Lift position:", liftPos);
 
         //opMode.telemetry.addData("Motor Power: ", liftMotor.getPower() + xGamepad2().left_stick_y + " Encoder Value: " + encoder.getCurrentPosition());
 
@@ -70,19 +75,19 @@ public class StoneLift extends XModule {
             liftMotor.setPower(motorPower); //if so, set a constant motor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
-        else if((xGamepad2().left_stick_y < 0 && magPressed) || (isAutoLiftMoving && magPressed)){
+        else if((xGamepad2().left_stick_y > 0 && magPressed && !goingUp) || (isAutoLiftMoving && magPressed && !goingUp)){
             liftMotor.setPower(0.0); //If so, set the motor power to 0
-            encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             isAutoLiftMoving = false;
         }
         else if (!isAutoLiftMoving){
-            liftMotor.setPower(xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
+            liftMotor.setPower(-xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
         }
 
 
         ///////////////AUTO LIFT FOR STACKING//////////////////
         if (xGamepad2().right_bumper.wasPressed()){
-            liftMotor.setTargetPosition(level * stoneHeight);
+            encoder.setTargetPosition(level * stoneHeight);
             liftMotor.setPower(1.0);
             goingUp = true;
             isAutoLiftMoving = true;
@@ -93,7 +98,7 @@ public class StoneLift extends XModule {
             isAutoLiftMoving = true;
         }
 
-        if (goingUp && liftMotor.getCurrentPosition() >= liftMotor.getTargetPosition()){
+        if (goingUp && liftPos >= encoder.getTargetPosition()){
             liftMotor.setPower(0.0);
             goingUp = false;
             isAutoLiftMoving = false;
@@ -108,7 +113,7 @@ public class StoneLift extends XModule {
             level = 3;
         }
         if (xGamepad1().dpad_right.wasPressed()){
-            level = liftMotor.getCurrentPosition()/stoneHeight;
+            level = liftPos/stoneHeight;
         }
         opMode.telemetry.addData("Level:", level);
     }

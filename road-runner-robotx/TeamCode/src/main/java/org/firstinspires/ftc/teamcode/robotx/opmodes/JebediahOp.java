@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robotx.modules.*;
 import org.firstinspires.ftc.teamcode.robotx.libraries.*;
 
-@TeleOp(name = "JebediahNoRgbOP", group = "Competition")
+@TeleOp(name = "JebediahOp", group = "Competition")
 public class JebediahOp extends XOpMode {
 
     //public StoneClaw stoneClaw;
@@ -15,8 +15,8 @@ public class JebediahOp extends XOpMode {
     public StoneLift stoneLift;
     public FoundationPins foundationPins;
     //public CapstonePositioning capstonePositioning;
-    //public ContinuousServoTest continuousServoTest;
-    public ParkingSlide parkingSlide;
+    public ContinuousServoTest continuousServoTest;
+    //public ParkingSlide parkingSlide;
 
 
     public void initModules() {
@@ -45,11 +45,11 @@ public class JebediahOp extends XOpMode {
         //capstonePositioning = new CapstonePositioning(this);
         //activeModules.add(capstonePositioning);
 
-        //continuousServoTest = new ContinuousServoTest(this);
-        //activeModules.add(continuousServoTest);
+        continuousServoTest = new ContinuousServoTest(this);
+        activeModules.add(continuousServoTest);
 
-        parkingSlide = new ParkingSlide(this);
-        activeModules.add(parkingSlide);
+        //parkingSlide = new ParkingSlide(this);
+        //activeModules.add(parkingSlide);
     }
 
 }
