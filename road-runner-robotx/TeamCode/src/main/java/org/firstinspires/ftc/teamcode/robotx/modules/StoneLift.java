@@ -21,6 +21,8 @@ public class StoneLift extends XModule {
 
     public int level = 3;
 
+    public boolean isAutoLiftMoving = false;
+
     public void init(){
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -64,15 +66,16 @@ public class StoneLift extends XModule {
 
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
-        if(!magPressed && xGamepad2().left_stick_y == 0){
+        if(!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving){
             liftMotor.setPower(motorPower); //if so, set a constant motor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
-        else if(xGamepad2().left_stick_y > 0 && magPressed){
+        else if((xGamepad2().left_stick_y < 0 && magPressed) || (isAutoLiftMoving && magPressed)){
             liftMotor.setPower(0.0); //If so, set the motor power to 0
-            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            isAutoLiftMoving = false;
         }
-        else{
+        else if (!isAutoLiftMoving){
             liftMotor.setPower(xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
         }
 
@@ -82,15 +85,18 @@ public class StoneLift extends XModule {
             liftMotor.setTargetPosition(level * stoneHeight);
             liftMotor.setPower(1.0);
             goingUp = true;
+            isAutoLiftMoving = true;
             level++;
         }
         else if (xGamepad2().left_bumper.wasPressed()){
             liftMotor.setPower(-1.0);
+            isAutoLiftMoving = true;
         }
 
         if (goingUp && liftMotor.getCurrentPosition() >= liftMotor.getTargetPosition()){
             liftMotor.setPower(0.0);
             goingUp = false;
+            isAutoLiftMoving = false;
         }
         if (xGamepad1().dpad_up.wasPressed()){
             level++;
