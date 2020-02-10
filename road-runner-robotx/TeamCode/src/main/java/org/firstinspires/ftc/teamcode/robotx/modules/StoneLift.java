@@ -18,12 +18,14 @@ public class StoneLift extends XModule {
     public boolean magPressed = true;
     public boolean goingUp = false;
 
-    public int stoneHeight = 370;
+    public int stoneHeight = 454;
 
     public int level = 1;
 
     public boolean isAutoLiftMoving = false;
     public int liftPos;
+
+    public int levelOffset = 0;
 
     public void init(){
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
@@ -87,7 +89,7 @@ public class StoneLift extends XModule {
 
         ///////////////AUTO LIFT FOR STACKING//////////////////
         if (xGamepad2().right_bumper.wasPressed()){
-            encoder.setTargetPosition(level * stoneHeight);
+            encoder.setTargetPosition((level * stoneHeight) - levelOffset);
             liftMotor.setPower(1.0);
             goingUp = true;
             isAutoLiftMoving = true;
@@ -106,7 +108,7 @@ public class StoneLift extends XModule {
         if (xGamepad1().dpad_up.wasPressed()){
             level++;
         }
-        else if (xGamepad1().dpad_down.wasPressed() && level >= 4){
+        else if (xGamepad1().dpad_down.wasPressed() && level >= 2){
             level--;
         }
         if (xGamepad1().dpad_left.wasPressed()){
@@ -116,6 +118,13 @@ public class StoneLift extends XModule {
             level = liftPos/stoneHeight;
         }
         opMode.telemetry.addData("Level:", level);
+
+        if (level >= 4){
+            levelOffset = 200;
+        }
+        else {
+            levelOffset = 0;
+        }
     }
 
 }

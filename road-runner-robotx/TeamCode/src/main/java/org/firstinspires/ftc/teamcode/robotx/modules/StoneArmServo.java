@@ -22,14 +22,14 @@ public class StoneArmServo extends XModule {
     long setTime;
     boolean deploy = false;
 
-    public double armIn = 0.8;
+    public double armIn = 0.85;
     public double armOut = 0.0;
-    public double armUp = 0.35;
+    public double armUp = 0.4;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
     public boolean returning = false;
-    public int level = 3;
+    public int level = 1;
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
@@ -131,21 +131,21 @@ public class StoneArmServo extends XModule {
         if (xGamepad1().dpad_up.wasPressed()){
             level++;
         }
-        else if (xGamepad1().dpad_down.wasPressed() && level >= 4){
+        else if (xGamepad1().dpad_down.wasPressed() && level >= 2){
             level--;
         }
         if (xGamepad1().dpad_left.wasPressed()){
-            level = 3;
+            level = 1;
         }
         if (xGamepad2().right_bumper.wasPressed()){
             level++;
         }
 
         if (level >= 4){
-            armOut = 0.2;
+            armOut = 0.25;
         }
         else {
-            armOut = 0.04;
+            armOut = 0.0;
         }
 
         if(xGamepad2().dpad_left.wasPressed()){
