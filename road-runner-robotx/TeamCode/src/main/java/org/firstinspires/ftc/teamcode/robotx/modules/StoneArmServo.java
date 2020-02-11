@@ -22,9 +22,9 @@ public class StoneArmServo extends XModule {
     long setTime;
     boolean deploy = false;
 
-    public double armIn = 0.85;
+    public double armIn = 0.88;
     public double armOut = 0.0;
-    public double armUp = 0.4;
+    public double armUp = 0.5;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
@@ -86,7 +86,8 @@ public class StoneArmServo extends XModule {
 
     public void loop () {
         if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen){
-            stoneArm.setPosition(0.88);
+            stoneArm.setPosition(0.96);
+            clawOpen = false;
             autoCloseClaw();
         }
         if (autoClose && timer.seconds() > 0.5){
@@ -141,7 +142,7 @@ public class StoneArmServo extends XModule {
             level++;
         }
 
-        if (level >= 4){
+        if (level >= 5){
             armOut = 0.25;
         }
         else {

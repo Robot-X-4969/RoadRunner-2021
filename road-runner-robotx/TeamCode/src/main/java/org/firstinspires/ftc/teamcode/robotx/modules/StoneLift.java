@@ -119,8 +119,8 @@ public class StoneLift extends XModule {
         }
         opMode.telemetry.addData("Level:", level);
 
-        if (level >= 4){
-            levelOffset = 200;
+        if (level >= 5){
+            levelOffset = 400;
         }
         else {
             levelOffset = 0;
