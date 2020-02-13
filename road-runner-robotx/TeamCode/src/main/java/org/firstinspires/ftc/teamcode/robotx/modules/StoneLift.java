@@ -13,12 +13,12 @@ public class StoneLift extends XModule {
 
     DcMotor liftMotor;
     DcMotor encoder;
-    public double motorPower = 0.01;
+    public double motorPower = 0.005;
     public DigitalChannel magSwitch;
     public boolean magPressed = true;
     public boolean goingUp = false;
 
-    public int stoneHeight = 494;
+    public int stoneHeight = 460;
 
     public int level = 1;
 

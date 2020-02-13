@@ -24,7 +24,7 @@ public class StoneArmServo extends XModule {
 
     public double armIn = 0.88;
     public double armOut = 0.0525;
-    public double armUp = 0.5;
+    public double armUp = 0.6;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
