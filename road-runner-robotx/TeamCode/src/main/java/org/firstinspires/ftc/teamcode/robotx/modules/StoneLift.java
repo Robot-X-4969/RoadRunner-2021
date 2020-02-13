@@ -101,7 +101,7 @@ public class StoneLift extends XModule {
         }
 
         if (goingUp && liftPos >= encoder.getTargetPosition()){
-            liftMotor.setPower(0.0);
+            liftMotor.setPower(0.2);
             goingUp = false;
             isAutoLiftMoving = false;
         }
@@ -119,7 +119,7 @@ public class StoneLift extends XModule {
         }
         opMode.telemetry.addData("Level:", level);
 
-        if (level >= 5){
+        if (level >= 4){
             levelOffset = 400;
         }
         else {

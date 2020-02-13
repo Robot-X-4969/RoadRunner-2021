@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimiz
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.StoneArm;
+import org.firstinspires.ftc.teamcode.robotx.modules.StoneArmServo;
 import org.firstinspires.ftc.teamcode.robotx.modules.StoneClaw;
 import org.firstinspires.ftc.teamcode.robotx.modules.StoneLift;
 import org.opencv.core.Core;
@@ -69,7 +70,7 @@ public class SkystoneBlue extends LinearOpMode {
 
     OpenCvInternalCamera phoneCam;
     FlywheelIntake flywheelIntake;
-    StoneArm stoneArm;
+    StoneArmServo stoneArmServo;
     FoundationPins pins;
 
 
@@ -112,15 +113,15 @@ public class SkystoneBlue extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
+        stoneArmServo = new StoneArmServo(this);
+        stoneArmServo.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
 
         flywheelIntake.start();
-        stoneArm.start();
+        stoneArmServo.start();
         pins.start();
         /**
         telemetry.addData("Starting Side: ", "Loading/Skystone");
@@ -158,7 +159,6 @@ public class SkystoneBlue extends LinearOpMode {
                 .lineTo(new Vector2d(21.5,30.5),
                         new ConstantInterpolator(toRadians(140)))
                 .build();
-        stoneArm.stoneArm.setPower(0);
         telemetry.addLine("Ready!");
         telemetry.update();
         waitForStart();
@@ -198,7 +198,7 @@ public class SkystoneBlue extends LinearOpMode {
             sleep(500);
             flywheelIntake.flywheelLeft.setPower(0);
             pins.deployPins();
-            stoneArm.clawServo.setPosition(0.4);
+            //stoneArm.clawServo.setPosition(0.4);
 
 
 
