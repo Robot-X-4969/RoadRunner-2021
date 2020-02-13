@@ -23,7 +23,7 @@ public class StoneArmServo extends XModule {
     boolean deploy = false;
 
     public double armIn = 0.88;
-    public double armOut = 0.08;
+    public double armOut = 0.06;
     public double armUp = 0.5;
 
     public boolean isArmUp = false;
@@ -146,7 +146,7 @@ public class StoneArmServo extends XModule {
             armOut = 0.25;
         }
         else {
-            armOut = 0.0;
+            armOut = 0.06;
         }
 
         if(xGamepad2().dpad_left.wasPressed()){
