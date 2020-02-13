@@ -23,7 +23,7 @@ public class StoneArmServo extends XModule {
     boolean deploy = false;
 
     public double armIn = 0.88;
-    public double armOut = 0.0;
+    public double armOut = 0.08;
     public double armUp = 0.5;
 
     public boolean isArmUp = false;
@@ -43,7 +43,7 @@ public class StoneArmServo extends XModule {
 
     public void init() {
         //initialize motor
-        stoneArm = opMode.hardwareMap.servo.get("stoneArm");
+        stoneArm = opMode.hardwareMap.servo.get("stoneArm2");
         //stoneArm.setDirection(DcMotorSimple.Direction.REVERSE);
         //stoneArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         clawServo = opMode.hardwareMap.servo.get("clawServo");
