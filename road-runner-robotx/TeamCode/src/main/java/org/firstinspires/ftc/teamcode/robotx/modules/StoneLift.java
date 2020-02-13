@@ -13,7 +13,7 @@ public class StoneLift extends XModule {
 
     DcMotor liftMotor;
     DcMotor encoder;
-    public double motorPower = 0.0;
+    public double motorPower = 0.1;
     public DigitalChannel magSwitch;
     public boolean magPressed = true;
     public boolean goingUp = false;
@@ -101,10 +101,12 @@ public class StoneLift extends XModule {
         }
 
         if (goingUp && liftPos >= encoder.getTargetPosition()){
-            liftMotor.setPower(0.2);
+            liftMotor.setPower(0.0);
             goingUp = false;
             isAutoLiftMoving = false;
         }
+
+
         if (xGamepad1().dpad_up.wasPressed()){
             level++;
         }

@@ -95,7 +95,7 @@ public class StoneArmServo extends XModule {
             autoClose = false;
         }
 
-        if (xGamepad2().right_trigger >= 0.7 && !isArmUp){ //Raise the arm
+        if ((xGamepad2().right_trigger >= 0.7 && !isArmUp) || (xGamepad2().right_bumper.wasPressed())){ //Raise the arm
             stoneArm.setPosition(armUp);
             isArmUp = true;
         }
