@@ -13,12 +13,12 @@ public class StoneLift extends XModule {
 
     DcMotor liftMotor;
     DcMotor encoder;
-    public double motorPower = 0.1;
+    public double motorPower = 0.0;
     public DigitalChannel magSwitch;
     public boolean magPressed = true;
     public boolean goingUp = false;
 
-    public int stoneHeight = 454;
+    public int stoneHeight = 494;
 
     public int level = 1;
 
@@ -34,6 +34,7 @@ public class StoneLift extends XModule {
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         encoder = opMode.hardwareMap.dcMotor.get("flywheelRight");
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //endStop = opMode.hardwareMap.touchSensor.get("endStop");
         //capServo = opMode.hardwareMap.servo.get("capServo");
         magSwitch = opMode.hardwareMap.get(DigitalChannel.class, "magSwitch");
