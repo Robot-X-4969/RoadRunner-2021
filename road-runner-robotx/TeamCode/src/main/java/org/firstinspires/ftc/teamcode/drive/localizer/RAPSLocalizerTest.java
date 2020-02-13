@@ -63,7 +63,7 @@ public class RAPSLocalizerTest extends TwoTrackingWheelLocalizer {
         imu = hardwareMap.get(BNO055IMU.class, "gyroSensor");
         imu.initialize(parameters);
 
-        xEncoder = hardwareMap.dcMotor.get("liftMotor"); //xAxis
+        xEncoder = hardwareMap.dcMotor.get("flywheelRight"); //xAxis
         yEncoder = hardwareMap.dcMotor.get("stoneArm"); //yAxis
     }
 

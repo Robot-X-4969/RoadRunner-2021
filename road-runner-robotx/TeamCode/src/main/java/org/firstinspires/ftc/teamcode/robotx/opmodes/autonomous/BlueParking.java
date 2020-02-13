@@ -54,7 +54,7 @@ import org.firstinspires.ftc.teamcode.robotx.modules.StoneLift;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "LoadingSideBlueAuton", group = "Autonomous")
+@Autonomous(name = "BlueParking", group = "Autonomous")
 public class BlueParking extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";

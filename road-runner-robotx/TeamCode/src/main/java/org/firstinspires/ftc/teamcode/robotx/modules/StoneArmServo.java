@@ -143,7 +143,7 @@ public class StoneArmServo extends XModule {
         }
 
         if (level >= 5){
-            armOut = 0.25;
+            armOut = 0.44;
         }
         else {
             armOut = 0.0525;

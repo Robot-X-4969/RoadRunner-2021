@@ -25,16 +25,16 @@ public class StoneLift extends XModule {
     public boolean isAutoLiftMoving = false;
     public int liftPos;
 
-    public int levelOffset = 0;
+    public int levelOffset = 50;
 
     public void init(){
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        encoder = opMode.hardwareMap.dcMotor.get("flywheelRight");
+        encoder = opMode.hardwareMap.dcMotor.get("liftMotor");
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //endStop = opMode.hardwareMap.touchSensor.get("endStop");
         //capServo = opMode.hardwareMap.servo.get("capServo");
         magSwitch = opMode.hardwareMap.get(DigitalChannel.class, "magSwitch");
@@ -65,7 +65,7 @@ public class StoneLift extends XModule {
             magPressed = true;
         }
 
-        liftPos = -encoder.getCurrentPosition();
+        liftPos = encoder.getCurrentPosition();
 
         opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
         opMode.telemetry.addData("Lift position:", liftPos);
@@ -75,7 +75,7 @@ public class StoneLift extends XModule {
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
         if(!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving){
-            liftMotor.setPower(motorPower); //if so, set a constant motor power
+            liftMotor.setPower(motorPower); //if so, set a constant mo[tor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
         else if((xGamepad2().left_stick_y > 0 && magPressed && !goingUp) || (isAutoLiftMoving && magPressed && !goingUp)){
@@ -123,10 +123,10 @@ public class StoneLift extends XModule {
         opMode.telemetry.addData("Level:", level);
 
         if (level >= 4){
-            levelOffset = 400;
+            levelOffset = 1870;
         }
         else {
-            levelOffset = 0;
+            levelOffset = 50;
         }
     }
 }
