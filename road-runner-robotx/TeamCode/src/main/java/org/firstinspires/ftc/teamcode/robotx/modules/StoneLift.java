@@ -126,6 +126,4 @@ public class StoneLift extends XModule {
             levelOffset = 0;
         }
     }
-
 }
-
