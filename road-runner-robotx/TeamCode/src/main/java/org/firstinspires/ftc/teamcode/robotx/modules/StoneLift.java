@@ -21,6 +21,7 @@ public class StoneLift extends XModule {
     public int stoneHeight = 460;
 
     public int level = 1;
+    public int stackLevel;
 
     public boolean isAutoLiftMoving = false;
     public int liftPos;
@@ -101,12 +102,42 @@ public class StoneLift extends XModule {
             isAutoLiftMoving = true;
         }
 
+        if (level == 1){
+            stackLevel = 0;
+        }
+        else if (level == 2){
+            stackLevel = 0;
+        }
+        else if (level == 3){
+            stackLevel = 0;
+        }
+        else if (level == 4){
+            stackLevel = 0;
+        }
+        else if (level == 5){
+            stackLevel = 0;
+        }
+        else if (level == 6){
+            stackLevel = 0;
+        }
+        else if (level == 7){
+            stackLevel = 0;
+        }
+        else if (level == 8){
+            stackLevel = 0;
+        }
+        else if (level == 9){
+            stackLevel = 0;
+        }
+        else if (level == 10){
+            stackLevel = 0;
+        }
+
         if (goingUp && liftPos >= encoder.getTargetPosition()){
             liftMotor.setPower(0.0);
             goingUp = false;
             isAutoLiftMoving = false;
         }
-
 
         if (xGamepad1().dpad_up.wasPressed()){
             level++;

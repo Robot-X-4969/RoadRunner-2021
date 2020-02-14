@@ -99,12 +99,14 @@ public class FlywheelIntake extends XModule {
         }
 
         //Allows for intake power adjustment by using the bumpers
-        if (xGamepad2().left_bumper.wasPressed() && intakePower > 0){
+        /*if (xGamepad2().left_bumper.wasPressed() && intakePower > 0){
             intakePower -= 0.05;
         }
         if (xGamepad2().right_bumper.wasPressed() && intakePower <= 1){
             intakePower += 0.05;
         }
+
+         */
 
         //Toggle intake in
         if(xGamepad2().dpad_down.wasPressed()) {

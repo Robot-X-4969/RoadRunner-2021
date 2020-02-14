@@ -11,12 +11,13 @@ public class JebediahOp extends XOpMode {
     public FlywheelIntake flywheelIntake;
     //CoachDDrive coachDDrive;
     public OrientationDrive orientationDrive;
-    public StoneArmServo stoneArmServo;
-    public StoneLift stoneLift;
+    //public StoneArmServo stoneArmServo;
+    //public StoneLift stoneLift;
     public FoundationPins foundationPins;
     //public CapstonePositioning capstonePositioning;
     public ContinuousServoTest continuousServoTest;
     //public ParkingSlide parkingSlide;
+    public MasterStacker masterStacker;
 
 
     public void initModules() {
@@ -27,8 +28,8 @@ public class JebediahOp extends XOpMode {
         flywheelIntake = new FlywheelIntake(this);
         activeModules.add(flywheelIntake);
 
-        stoneArmServo = new StoneArmServo(this);
-        activeModules.add(stoneArmServo);
+        //stoneArmServo = new StoneArmServo(this);
+        //activeModules.add(stoneArmServo);
 
         //coachDDrive = new CoachDDrive(this);
         //activeModules.add(coachDDrive);
@@ -36,8 +37,8 @@ public class JebediahOp extends XOpMode {
         orientationDrive = new OrientationDrive(this);
         activeModules.add(orientationDrive);
 
-        stoneLift = new StoneLift(this);
-        activeModules.add(stoneLift);
+        //stoneLift = new StoneLift(this);
+        //activeModules.add(stoneLift);
 
         foundationPins = new FoundationPins(this);
         activeModules.add(foundationPins);
@@ -50,6 +51,9 @@ public class JebediahOp extends XOpMode {
 
         //parkingSlide = new ParkingSlide(this);
         //activeModules.add(parkingSlide);
+
+        masterStacker = new MasterStacker(this);
+        activeModules.add(masterStacker);
     }
 
 }
