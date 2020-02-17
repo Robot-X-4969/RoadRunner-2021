@@ -142,7 +142,7 @@ public class MasterStacker extends XModule {
 
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
-        if(!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving){
+        if(!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving && !liftMoveSlightly){
             liftMotor.setPower(motorPower); //if so, set a constant mo[tor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
@@ -268,7 +268,7 @@ public class MasterStacker extends XModule {
             timer.reset();
         }
 
-        if (timer.seconds() > 0.2 && liftMoveSlightly){
+        if (timer.seconds() > 0.4 && liftMoveSlightly){
             liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
         }
