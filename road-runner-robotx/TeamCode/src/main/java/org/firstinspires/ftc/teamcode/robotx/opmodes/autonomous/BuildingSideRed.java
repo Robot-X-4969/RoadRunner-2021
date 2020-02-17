@@ -86,9 +86,7 @@ public class BuildingSideRed extends LinearOpMode {
 
     FlywheelIntake flywheelIntake;
     OrientationDrive movement;
-    StoneArm stoneArm;
-    StoneClaw stoneClaw;
-    StoneLift stoneLift;
+    MasterStacker masterStacker;
     FoundationPins pins;
 
 
@@ -154,26 +152,18 @@ public class BuildingSideRed extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneClaw = new StoneClaw(this);
-        stoneClaw.init();
+        masterStacker = new MasterStacker(this);
+        masterStacker.init();
 
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
-        stoneLift = new StoneLift(this);
-        stoneLift.init();
-
-
 
 
         movement.start();
-        stoneClaw.start();
+        masterStacker.start();
         flywheelIntake.start();
-        stoneArm.start();
-        stoneClaw.start();
         pins.start();
 
         telemetry.addData("Starting Side: ", "Building/Foundation");
@@ -196,7 +186,6 @@ public class BuildingSideRed extends LinearOpMode {
             sleep(1000);
             flywheelIntake.flywheelRight.setPower(0.0);
             flywheelIntake.flywheelLeft.setPower(0.0);
-            stoneArm.stoneArm.setPower(-0.5);
 
             //goForward(1.0,500);
             //sleep(500);

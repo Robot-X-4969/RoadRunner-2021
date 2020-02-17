@@ -91,9 +91,7 @@ public class LoadingSideRed extends LinearOpMode {
 
     FlywheelIntake flywheelIntake;
     OrientationDrive movement;
-    StoneArm stoneArm;
-    StoneClaw stoneClaw;
-    StoneLift stoneLift;
+    MasterStacker masterStacker;
     FoundationPins pins;
 
 
@@ -158,17 +156,13 @@ public class LoadingSideRed extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneClaw = new StoneClaw(this);
-        stoneClaw.init();
+        masterStacker = new MasterStacker(this);
+        masterStacker.init();
 
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
-        stoneLift = new StoneLift(this);
-        stoneLift.init();
 
 
 
@@ -176,10 +170,8 @@ public class LoadingSideRed extends LinearOpMode {
 
 
         movement.start();
-        stoneClaw.start();
+        masterStacker.start();
         flywheelIntake.start();
-        stoneArm.start();
-        stoneClaw.start();
         pins.start();
 
 
@@ -195,7 +187,6 @@ public class LoadingSideRed extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
-        stoneArm.stoneArm.setPower(0);
 
         if (opModeIsActive()) {
             /////////////////////Movement///////////////////////

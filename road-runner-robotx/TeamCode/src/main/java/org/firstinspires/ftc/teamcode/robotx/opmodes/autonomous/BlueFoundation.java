@@ -85,9 +85,7 @@ public class BlueFoundation extends LinearOpMode {
 
     FlywheelIntake flywheelIntake;
     OrientationDrive movement;
-    StoneArm stoneArm;
-    StoneClaw stoneClaw;
-    StoneLift stoneLift;
+    MasterStacker masterStacker;
     FoundationPins pins;
 
 
@@ -151,26 +149,17 @@ public class BlueFoundation extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneClaw = new StoneClaw(this);
-        stoneClaw.init();
-
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
+        masterStacker = new MasterStacker(this);
+        masterStacker.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
-        stoneLift = new StoneLift(this);
-        stoneLift.init();
-
-
 
 
         movement.start();
-        stoneClaw.start();
+        masterStacker.start();
         flywheelIntake.start();
-        stoneArm.start();
-        stoneClaw.start();
         pins.start();
 
         telemetry.addData("Starting Side: ", "Foundation/Building");
@@ -185,7 +174,6 @@ public class BlueFoundation extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-        stoneArm.stoneArm.setPower(0);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -198,7 +186,7 @@ public class BlueFoundation extends LinearOpMode {
             //flywheelIntake.flywheelRight.setPower(0.0);
             //flywheelIntake.flywheelLeft.setPower(0.0);
             sleep(1000);
-            stoneArm.clawServo.setPosition(0.4);
+            masterStacker.clawServo.setPosition(0.4);
             goBackward(0.8,500);
             sleep(500);
             strafeRight(0.5,550);
@@ -224,7 +212,6 @@ public class BlueFoundation extends LinearOpMode {
             sleep(200);
             goForward(1.0,500);
             sleep(200);
-            stoneArm.stoneArm.setPower(0);
             stopDriving();
             sleep(15000);
         }

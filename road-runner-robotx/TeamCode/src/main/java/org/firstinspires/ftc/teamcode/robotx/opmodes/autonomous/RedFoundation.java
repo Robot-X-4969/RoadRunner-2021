@@ -86,9 +86,7 @@ public class RedFoundation extends LinearOpMode {
 
     FlywheelIntake flywheelIntake;
     OrientationDrive movement;
-    StoneArm stoneArm;
-    StoneClaw stoneClaw;
-    StoneLift stoneLift;
+    MasterStacker masterStacker;
     FoundationPins pins;
 
 
@@ -152,26 +150,17 @@ public class RedFoundation extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneClaw = new StoneClaw(this);
-        stoneClaw.init();
-
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
+        masterStacker = new MasterStacker(this);
+        masterStacker.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
-        stoneLift = new StoneLift(this);
-        stoneLift.init();
-
-
 
 
         movement.start();
-        stoneClaw.start();
+        masterStacker.start();
         flywheelIntake.start();
-        stoneArm.start();
-        stoneClaw.start();
         pins.start();
 
         telemetry.addData("Starting Side: ", "Foundation/Building");
@@ -186,7 +175,6 @@ public class RedFoundation extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
-        stoneArm.stoneArm.setPower(0);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -194,7 +182,7 @@ public class RedFoundation extends LinearOpMode {
             goBackward(0.7,170);
             pins.deployPins();
             sleep(1000);
-            stoneArm.clawServo.setPosition(0.4);
+            masterStacker.clawServo.setPosition(0.4);
             goBackward(0.8,500);
             sleep(500);
             strafeLeft(0.5,550);
@@ -223,7 +211,6 @@ public class RedFoundation extends LinearOpMode {
             //sleep(5200);
             //goForward(1.0,500);
             sleep(200);
-            stoneArm.stoneArm.setPower(0);
             stopDriving();
             sleep(20000);
             stop();

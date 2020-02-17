@@ -39,6 +39,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
+import org.firstinspires.ftc.teamcode.robotx.modules.MasterStacker;
 import org.firstinspires.ftc.teamcode.robotx.modules.OrientationDrive;
 import org.firstinspires.ftc.teamcode.robotx.modules.StoneArm;
 import org.firstinspires.ftc.teamcode.robotx.modules.StoneClaw;
@@ -97,9 +98,7 @@ public class BlueParking extends LinearOpMode {
 
     FlywheelIntake flywheelIntake;
     OrientationDrive movement;
-    StoneArm stoneArm;
-    StoneClaw stoneClaw;
-    StoneLift stoneLift;
+    MasterStacker masterStacker;
     FoundationPins pins;
 
 
@@ -163,27 +162,17 @@ public class BlueParking extends LinearOpMode {
         flywheelIntake = new FlywheelIntake(this);
         flywheelIntake.init();
 
-        stoneClaw = new StoneClaw(this);
-        stoneClaw.init();
-
-        stoneArm = new StoneArm(this);
-        stoneArm.init();
+        masterStacker = new MasterStacker(this);
+        masterStacker.init();
 
         pins = new FoundationPins(this);
         pins.init();
 
-        stoneLift = new StoneLift(this);
-        stoneLift.init();
-
-
-
 
 
         movement.start();
-        stoneClaw.start();
+        masterStacker.start();
         flywheelIntake.start();
-        stoneArm.start();
-        stoneClaw.start();
         pins.start();
         telemetry.addData("Starting Side: ", "Loading/Skystone");
         telemetry.addData("Position: ","Facing back wall, Color Sensor lines up with middle of tile");
@@ -193,7 +182,6 @@ public class BlueParking extends LinearOpMode {
         movement.backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         movement.frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         movement.frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stoneArm.stoneArm.setPower(0);
 
         telemetry.update();
 
