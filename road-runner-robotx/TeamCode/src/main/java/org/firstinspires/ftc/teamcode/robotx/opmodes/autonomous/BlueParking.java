@@ -194,16 +194,41 @@ public class BlueParking extends LinearOpMode {
 
         chooseParkingPosition.loop();
 
+
+
+
+
         waitForStart();
 
 
         if (opModeIsActive()) {
+            telemetry.addData("Start Positions: ", "is it wall?: " + chooseParkingPosition.isWall + "is it loading?: " + chooseParkingPosition.isLoadingSide + "is it bridge?: " + chooseParkingPosition.isBridge + "is it building?: " + chooseParkingPosition.isBuildingSide);
+            telemetry.update();
 
             /////////////////////Movement///////////////////////
             //goForward(1.0,500);
             //sleep(500);
             //strafeLeft(1.0,650);
-            strafeLeft(1.0,200);
+            if (chooseParkingPosition.isWall && chooseParkingPosition.isBridge == false) {
+                if (chooseParkingPosition.isBuildingSide && chooseParkingPosition.isLoadingSide == false){
+                    strafeRight(1.0,200);
+                }else  if (chooseParkingPosition.isBuildingSide == false && chooseParkingPosition.isLoadingSide){
+                    strafeLeft(1.0,200);
+                }
+            else if (chooseParkingPosition.isWall == false && chooseParkingPosition.isBridge) {
+                if (chooseParkingPosition.isBuildingSide == false && chooseParkingPosition.isLoadingSide) {
+                    goForward(1.0,800);
+                    strafeRight(1.0,200);
+                }else if (chooseParkingPosition.isBuildingSide && chooseParkingPosition.isLoadingSide == false){
+                    goForward(1.0,800);
+                    strafeLeft(1.0,200);
+                }
+            }
+            }
+
+
+
+            sleep(10000);
 
 
 
