@@ -222,15 +222,12 @@ public class SkystoneRed extends LinearOpMode {
                         drive.trajectoryBuilder()
                                 .forward(5)
                                 .lineTo(new Vector2d(20,20), new SplineInterpolator(toRadians(180),toRadians(0)))
-                                .addMarker(1.5, ()->{
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    return Unit.INSTANCE;
-                                })
                                 .build()
                         //Drive forward to pick up skystone
                 );
-
+                flywheelIntake.toggleFly();
+                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.toggleClaw();
 
 
 
@@ -280,7 +277,7 @@ public class SkystoneRed extends LinearOpMode {
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .strafeLeft(5)
-                                .lineTo(new Vector2d(45,50), new ConstantInterpolator(toRadians(180)))
+                                .lineTo(new Vector2d(37,31), new ConstantInterpolator(toRadians(130)))
                                 .addMarker(0.5, ()->{
                                     flywheelIntake.toggleFly();
                                     return Unit.INSTANCE;
@@ -291,17 +288,14 @@ public class SkystoneRed extends LinearOpMode {
                 //stoneArm.clawServo.setPosition(0);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .forward(5)
+                                .forward(8)
                                 .lineTo(new Vector2d(20,20), new SplineInterpolator(toRadians(180),toRadians(0)))
-                                .addMarker(1.5, ()->{
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    masterStacker.toggleClaw();
-                                    return Unit.INSTANCE;
-                                })
                                 .build()
                         //Drive forward to pick up skystone
-                );;
+                );
+                flywheelIntake.toggleFly();
+                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.toggleClaw();
 
 
             }
@@ -315,14 +309,14 @@ public class SkystoneRed extends LinearOpMode {
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             .lineTo(new Vector2d(65,25))
-                            .lineTo(new Vector2d(85,32), new SplineInterpolator(toRadians(0), toRadians(-90)))
+                            .lineTo(new Vector2d(85,31), new SplineInterpolator(toRadians(0), toRadians(-90)))
                             .build()
             );
             flywheelIntake.toggleFlyReverse();
             //drive.turnSync(Math.toRadians(80));
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .back(20)
+                            .back(24)
                             .addMarker(0.83, ()->{
                                 pins.deployPins();
                                 flywheelIntake.flywheelRight.setPower(0.35);
@@ -351,7 +345,7 @@ public class SkystoneRed extends LinearOpMode {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(5, 32), new ConstantInterpolator(Math.toRadians(180)))
+                                .lineTo(new Vector2d(3, 32), new ConstantInterpolator(Math.toRadians(180)))
                                 //.splineTo(new Pose2d(15,40), new ConstantInterpolator(Math.toRadians(180)))
                                 //.lineTo(new Vector2d(0,40), new ConstantInterpolator(Math.toRadians(180)))
                                 .build()
@@ -374,8 +368,8 @@ public class SkystoneRed extends LinearOpMode {
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
-                                .lineTo(new Vector2d(60, 37))
-                                .lineTo(new Vector2d(105, 32))
+                                .lineTo(new Vector2d(70, 32))
+                                .lineTo(new Vector2d(105, 30))
                                 .build()
                 );
 
@@ -404,8 +398,8 @@ public class SkystoneRed extends LinearOpMode {
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
-                                .lineTo(new Vector2d(60, 37))
-                                .lineTo(new Vector2d(100, 32))
+                                .lineTo(new Vector2d(70, 32))
+                                .lineTo(new Vector2d(100, 30))
                                 .build()
                 );
             }else if(isLeft == false && isCenter && isRight == false) {
@@ -436,8 +430,8 @@ public class SkystoneRed extends LinearOpMode {
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
-                                .lineTo(new Vector2d(60, 37))
-                                .lineTo(new Vector2d(105, 32))
+                                .lineTo(new Vector2d(70, 36))
+                                .lineTo(new Vector2d(105, 30))
                                 .build()
                 );
             }
