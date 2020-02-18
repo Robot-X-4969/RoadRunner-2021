@@ -17,7 +17,6 @@ public class ChooseParkingPosition extends XModule {
     public ChooseParkingPosition(OpMode op){super(op);}
 
     public void loop () {
-
         if(xGamepad2().dpad_up.wasPressed()) {
             isBridge = true;
         } else if (xGamepad2().dpad_down.wasPressed()) {
@@ -26,9 +25,6 @@ public class ChooseParkingPosition extends XModule {
             isLoadingSide = true;
         } else if (xGamepad2().dpad_left.wasPressed()) {
             isBuildingSide = true;
-
         }
-
-
     }
 }

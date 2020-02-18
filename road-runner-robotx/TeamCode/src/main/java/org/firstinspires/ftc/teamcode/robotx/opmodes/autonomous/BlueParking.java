@@ -37,6 +37,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.robotx.modules.ChooseParkingPosition;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.MasterStacker;
@@ -100,6 +101,7 @@ public class BlueParking extends LinearOpMode {
     OrientationDrive movement;
     MasterStacker masterStacker;
     FoundationPins pins;
+    ChooseParkingPosition chooseParkingPosition;
 
 
     @Override
@@ -168,12 +170,16 @@ public class BlueParking extends LinearOpMode {
         pins = new FoundationPins(this);
         pins.init();
 
+        chooseParkingPosition = new ChooseParkingPosition(this);
+        chooseParkingPosition.init();
+
 
 
         movement.start();
         masterStacker.start();
         flywheelIntake.start();
         pins.start();
+        chooseParkingPosition.start();
         telemetry.addData("Starting Side: ", "Loading/Skystone");
         telemetry.addData("Position: ","Facing back wall, Color Sensor lines up with middle of tile");
         telemetry.update();
@@ -186,7 +192,7 @@ public class BlueParking extends LinearOpMode {
         telemetry.update();
 
 
-
+        chooseParkingPosition.loop();
 
         waitForStart();
 
