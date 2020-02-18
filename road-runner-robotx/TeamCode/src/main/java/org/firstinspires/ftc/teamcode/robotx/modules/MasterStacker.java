@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.robotx.libraries.XModule;
 public class MasterStacker extends XModule {
     public MasterStacker(OpMode op){super(op);}
 
-    DcMotor liftMotor;
-    DcMotor encoder;
+    public DcMotor liftMotor;
+    public DcMotor encoder;
     public double motorPower = 0.002;
     public DigitalChannel magSwitch;
     public boolean magPressed = true;
@@ -44,9 +44,9 @@ public class MasterStacker extends XModule {
     long setTime;
     boolean deploy = false;
 
-    public double armIn = 0.88;
-    public double armOut = 0.0525;
-    public double armUp = 0.6;
+    public double armIn = 0.87;
+    public double armOut = 0.005;
+    public double armUp = 0.55;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
@@ -170,7 +170,7 @@ public class MasterStacker extends XModule {
         }
 
         if (level == 1){
-            stackLevel = 517;
+            stackLevel = 490;
         }
         else if (level == 2){
             stackLevel = 960;
@@ -284,10 +284,10 @@ public class MasterStacker extends XModule {
          */
 
         if (level >= 6){
-            armOut = 0.48;
+            armOut = 0.43;
         }
         else {
-            armOut = 0.0525;
+            armOut = 0.0025;
         }
 
         if(xGamepad2().dpad_left.wasPressed()){

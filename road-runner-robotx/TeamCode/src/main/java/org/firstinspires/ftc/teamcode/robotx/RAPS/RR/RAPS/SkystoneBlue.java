@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
@@ -212,21 +213,24 @@ public class SkystoneBlue extends LinearOpMode {
                 isLeft = true;
 
                 /**Collect Skystone 1**/
-                drive.followTrajectorySync(path1); //Move to skystone
-                //stoneArm.stoneArm.setPower(0.45);
-                //stoneArm.clawServo.setPosition(0);
+                drive.followTrajectorySync(path1);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(13,40))
+                                .lineTo(new Vector2d(14,42))
                                 .lineTo(new Vector2d(15, 25),
                                         new ConstantInterpolator(toRadians(180)))
-                                .addMarker(1.6, ()->{
+                                .addMarker(1.7, ()->{
                                     flywheelIntake.toggleFly();
+                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
                                     return Unit.INSTANCE;
                                 })
                                 .build()
                         //Drive forward to pick up skystone
                 );
+                sleep(300);
+                //masterStacker.clawServo.setPosition(0);
+                masterStacker.toggleClaw();
+
 
 
 
@@ -261,6 +265,8 @@ public class SkystoneBlue extends LinearOpMode {
                                 })
                                 .build()
                 );
+                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.toggleClaw();
                 drive.turnSync(toRadians(170));
                 sleep(100);
 
@@ -287,6 +293,8 @@ public class SkystoneBlue extends LinearOpMode {
                                 .lineTo(new Vector2d(-4,36), new ConstantInterpolator(toRadians(35)))
                                 .addMarker(1.9, ()->{
                                     flywheelIntake.toggleFly();
+                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.toggleClaw();
                                     return Unit.INSTANCE;
                                 })
                                 .lineTo(new Vector2d(3, 28), new SplineInterpolator(toRadians(35), toRadians(180)))
@@ -308,21 +316,27 @@ public class SkystoneBlue extends LinearOpMode {
                             .lineTo(new Vector2d(-76,33), new SplineInterpolator(toRadians(180), toRadians(270)))
                             .build()
             );
-            flywheelIntake.toggleFlyReverse();
             //drive.turnSync(Math.toRadians(80));
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
                             .back(20)
                             .addMarker(0.83, ()->{
                                 pins.deployPins();
+                                flywheelIntake.flywheelRight.setPower(0.35);
+                                flywheelIntake.flywheelLeft.setPower(0.35);
+                                masterStacker.stoneArm.setPosition(0.2);
                                 return Unit.INSTANCE;
                             })
                             .splineTo(new Pose2d(-45,28))
                             .build()
             );
+            //masterStacker.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //masterStacker.liftMotor.setTargetPosition(500);
+
             pins.deployPins();
+            masterStacker.toggleClaw();
+            //masterStacker.clawServo.setPosition(0.28);
             sleep(200);
-            flywheelIntake.toggleFlyReverse();
             flywheelIntake.toggleFly();
 
 
@@ -337,9 +351,10 @@ public class SkystoneBlue extends LinearOpMode {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(2, 25))
+                                .lineTo(new Vector2d(1, 25))
                                 .build()
                 );
+                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 //.splineTo(new Pose2d(20,35,0))
@@ -350,8 +365,10 @@ public class SkystoneBlue extends LinearOpMode {
                         drive.trajectoryBuilder()
                                 .forward(5)
                                 .strafeRight(13)
-                                .addMarker(1.3, () -> {
+                                .addMarker(1.6, () -> {
                                     flywheelIntake.toggleFly();
+                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.toggleClaw();
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
@@ -372,12 +389,16 @@ public class SkystoneBlue extends LinearOpMode {
                                 .strafeLeft(18)
                                 .build()
                 );
+                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
+                sleep(400);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .forward(8)
                                 .strafeRight(18)
                                 .addMarker(2, () -> {
                                     flywheelIntake.toggleFly();
+                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.toggleClaw();
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
@@ -394,11 +415,15 @@ public class SkystoneBlue extends LinearOpMode {
                                 .lineTo(new Vector2d(6.25,39), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
+                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
+                sleep(400);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(13,39), new ConstantInterpolator(toRadians(0)))
                                 .addMarker(2, () -> {
                                     flywheelIntake.toggleFly();
+                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.toggleClaw();
                                     return Unit.INSTANCE;
                                 })
                                 .strafeRight(16)
@@ -409,11 +434,16 @@ public class SkystoneBlue extends LinearOpMode {
                 );
             }
 
-
-
+            flywheelIntake.flywheelRight.setPower(0.35);
+            flywheelIntake.flywheelLeft.setPower(0.35);
+            masterStacker.stoneArm.setPosition(0.25);
+            sleep(1000);
+            masterStacker.toggleClaw();
+            masterStacker.stoneArm.setPosition(masterStacker.armIn);
+            flywheelIntake.toggleFly();
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(-35,25))
+                            .lineTo(new Vector2d(-35,25), new ConstantInterpolator(Math.toRadians(0)))
                             .build()
             );
 
