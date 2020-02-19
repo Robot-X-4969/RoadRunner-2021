@@ -53,6 +53,8 @@ public class MasterStacker extends XModule {
     public boolean returning = false;
     public boolean liftMoveSlightly = false;
 
+    public boolean capstone = false;
+
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
 
@@ -111,10 +113,16 @@ public class MasterStacker extends XModule {
 
     public void returnArm(){
         if (isArmOut){
-            clawServo.setPosition(0.28);
-            clawOpen = true;
-            returning = true;
-
+            if (capstone) {
+                clawServo.setPosition(1.0);
+                clawOpen = true;
+                returning = true;
+            }
+            else {
+                clawServo.setPosition(0.28);
+                clawOpen = true;
+                returning = true;
+            }
             timer.reset();
         }
     }
@@ -290,7 +298,7 @@ public class MasterStacker extends XModule {
             armOut = 0.43;
         }
         else {
-            armOut = 0.0025;
+            armOut = 0.01;
         }
 
         if(xGamepad2().dpad_left.wasPressed()){
@@ -307,8 +315,11 @@ public class MasterStacker extends XModule {
 
         //Deploy capstone only if it is 5 seconds until endgame. This prevents accidentally dropping the capstone before endgame
         //Driver 1 can override timer by pulling both triggers at the same time
-        if ((xGamepad2().y.wasPressed() && capstoneTimer.seconds() > 85) || (xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
+        if ((xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
             clawServo.setPosition(1.0);
+        }
+        if (xGamepad2().y.wasPressed()){
+            capstone = true;
         }
     }
 }
