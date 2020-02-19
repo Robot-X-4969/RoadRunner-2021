@@ -135,7 +135,7 @@ public class MasterStacker extends XModule {
         liftPos = encoder.getCurrentPosition();
 
 
-        opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
+        //opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
         opMode.telemetry.addData("Lift position:", liftPos);
 
         //opMode.telemetry.addData("Motor Power: ", liftMotor.getPower() + xGamepad2().left_stick_y + " Encoder Value: " + encoder.getCurrentPosition());
@@ -150,6 +150,9 @@ public class MasterStacker extends XModule {
             liftMotor.setPower(0.0); //If so, set the motor power to 0
             //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             isAutoLiftMoving = false;
+        }
+        else if (liftMotor.getCurrentPosition() <= 225 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed){
+            liftMotor.setPower(-0.007);
         }
         else if (!isAutoLiftMoving){
             liftMotor.setPower(-xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal

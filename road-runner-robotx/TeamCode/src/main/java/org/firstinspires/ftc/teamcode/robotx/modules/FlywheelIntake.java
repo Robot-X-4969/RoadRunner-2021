@@ -84,7 +84,7 @@ public class FlywheelIntake extends XModule {
         }
     public void loop(){
         //Display intake current power
-        opMode.telemetry.addData("Intake Power: ", intakePower);
+        //opMode.telemetry.addData("Intake Power: ", intakePower);
 
         //Main statement for setting the intake power
         if (isFlywheelOn && !jiggle){
@@ -143,7 +143,7 @@ public class FlywheelIntake extends XModule {
 
         ///////////////////////Color sensing///////////////////////////////////
 
-        opMode.telemetry.addData("Stone in robot?", stone);
+        //opMode.telemetry.addData("Stone in robot?", stone);
 
         //Test rgb values for REV color sensor
         /*opMode.telemetry.addData("Red:", intakeColor.red());
