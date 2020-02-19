@@ -17,7 +17,9 @@ import org.firstinspires.ftc.teamcode.robotx.libraries.XModule;
 // This is so that we can have the lift and the arm be dependent on each other for some actions
 
 public class MasterStacker extends XModule {
-    public MasterStacker(OpMode op){super(op);}
+    public MasterStacker(OpMode op) {
+        super(op);
+    }
 
     public DcMotor liftMotor;
     public DcMotor encoder;
@@ -33,6 +35,7 @@ public class MasterStacker extends XModule {
 
     public boolean isAutoLiftMoving = false;
     public int liftPos;
+    public boolean homing = false;
 
     public int levelOffset = 50;
 
@@ -61,7 +64,7 @@ public class MasterStacker extends XModule {
     public boolean clawOpen = true;
     public boolean autoClose = false;
 
-    public void init(){
+    public void init() {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -96,29 +99,27 @@ public class MasterStacker extends XModule {
         }
     }*/
 
-    public void start(){
+    public void start() {
         //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void toggleClaw(){
-        if (clawOpen){
+    public void toggleClaw() {
+        if (clawOpen) {
             clawServo.setPosition(0);
             clawOpen = false;
-        }
-        else {
+        } else {
             clawServo.setPosition(0.28);
             clawOpen = true;
         }
     }
 
-    public void returnArm(){
-        if (isArmOut){
+    public void returnArm() {
+        if (isArmOut) {
             if (capstone) {
                 clawServo.setPosition(1.0);
                 clawOpen = true;
                 returning = true;
-            }
-            else {
+            } else {
                 clawServo.setPosition(0.28);
                 clawOpen = true;
                 returning = true;
@@ -126,17 +127,17 @@ public class MasterStacker extends XModule {
             timer.reset();
         }
     }
-    public void autoCloseClaw(){
+
+    public void autoCloseClaw() {
         autoClose = true;
 
         timer.reset();
     }
 
     public void loop() {
-        if(magSwitch.getState()){
+        if (magSwitch.getState()) {
             magPressed = false;
-        }
-        else {
+        } else {
             magPressed = true;
         }
 
@@ -150,22 +151,30 @@ public class MasterStacker extends XModule {
 
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
-        if(!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving && !liftMoveSlightly){
+        if (!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving && !liftMoveSlightly && !homing) {
             liftMotor.setPower(motorPower); //if so, set a constant mo[tor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
-        else if((xGamepad2().left_stick_y > 0 && magPressed && !goingUp) || (isAutoLiftMoving && magPressed && !goingUp)){
+        else if ((xGamepad2().left_stick_y > 0 && magPressed && !goingUp && !homing) || (isAutoLiftMoving && magPressed && !goingUp && !homing)) {
             liftMotor.setPower(0.0); //If so, set the motor power to 0
             //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             isAutoLiftMoving = false;
-        }
-        else if (liftMotor.getCurrentPosition() <= 225 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed){
+        } else if (liftMotor.getCurrentPosition() <= 225 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
             liftMotor.setPower(-0.007);
-        }
-        else if (!isAutoLiftMoving){
+        } else if (!isAutoLiftMoving && !homing) {
             liftMotor.setPower(-xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
         }
 
+        ///////////////HOMING ROUTINE//////////////////////////
+        if (magPressed && xGamepad2().dpad_right.wasPressed()) {
+            liftMotor.setPower(0.2);
+            homing = true;
+        }
+        if (homing && !magPressed) {
+            homing = false;
+            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         ///////////////AUTO LIFT FOR STACKING//////////////////
         if (xGamepad2().right_bumper.wasPressed()){
@@ -301,7 +310,7 @@ public class MasterStacker extends XModule {
             armOut = 0.01;
         }
 
-        if(xGamepad2().dpad_left.wasPressed()){
+        /*if(xGamepad2().dpad_left.wasPressed()){
             clawServo.setPosition(0);
             clawOpen = false;
         }
@@ -309,6 +318,8 @@ public class MasterStacker extends XModule {
             clawServo.setPosition(0.3);
             clawOpen = true;
         }
+
+         */
         if (xGamepad2().x.wasPressed()){
             toggleClaw();
         }
@@ -321,5 +332,6 @@ public class MasterStacker extends XModule {
         if (xGamepad2().y.wasPressed()){
             capstone = true;
         }
+        opMode.telemetry.addData("Capstone?", capstone);
     }
 }

@@ -17,7 +17,7 @@ public class ContinuousServoTest extends XModule {
     }
 
     public void loop(){
-        opMode.telemetry.addData("Tape measure power: ", testCRServo.getPower());
+        //opMode.telemetry.addData("Tape measure power: ", testCRServo.getPower());
         opMode.telemetry.update();
         if (xGamepad1().dpad_up.isDown()){
             testCRServo.setPower(0.7);
