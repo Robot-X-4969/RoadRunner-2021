@@ -48,7 +48,7 @@ public class MasterStacker extends XModule {
     boolean deploy = false;
 
     public double armIn = 0.87;
-    public double armOut = 0.005;
+    public double armOut = 0.01;
     public double armUp = 0.55;
 
     public boolean isArmUp = false;
@@ -63,6 +63,7 @@ public class MasterStacker extends XModule {
 
     public boolean clawOpen = true;
     public boolean autoClose = false;
+    public boolean autoIntake = true;
 
     public void init() {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
@@ -98,10 +99,6 @@ public class MasterStacker extends XModule {
             capped = true;
         }
     }*/
-
-    public void start() {
-        //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
 
     public void toggleClaw() {
         if (clawOpen) {
@@ -152,14 +149,14 @@ public class MasterStacker extends XModule {
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
         if (!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving && !liftMoveSlightly && !homing) {
-            liftMotor.setPower(motorPower); //if so, set a constant mo[tor power
+            liftMotor.setPower(motorPower); //if so, set a constant motor power
         }
         //Check to see if the lift is going down and if the magnetic limit switch is pressed
         else if ((xGamepad2().left_stick_y > 0 && magPressed && !goingUp && !homing) || (isAutoLiftMoving && magPressed && !goingUp && !homing)) {
             liftMotor.setPower(0.0); //If so, set the motor power to 0
             //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             isAutoLiftMoving = false;
-        } else if (liftMotor.getCurrentPosition() <= 225 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
+        } else if (liftMotor.getCurrentPosition() <= 200 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
             liftMotor.setPower(-0.007);
         } else if (!isAutoLiftMoving && !homing) {
             liftMotor.setPower(-xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
@@ -249,12 +246,23 @@ public class MasterStacker extends XModule {
 
          */
 
-        //Begin arm code
-        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen){
+        //////////////////BEGIN ARM CODE////////////////////////
+        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake){
             stoneArm.setPosition(0.96);
             clawOpen = false;
             autoCloseClaw();
         }
+
+        //Prevent arm from automatically coming down if the claw breaks so that we can feed
+        if (xGamepad1().left_stick_button.wasPressed() && xGamepad1().right_stick_button.wasPressed()){
+            if (autoIntake){
+                autoIntake = false;
+            }
+            else {
+                autoIntake = true;
+            }
+        }
+
         if (autoClose && timer.seconds() > 0.5){
             clawServo.setPosition(0.0);
             autoClose = false;
@@ -278,17 +286,29 @@ public class MasterStacker extends XModule {
         if (isArmOut && xGamepad2().a.wasReleased()){ //Once the button is released, reset the arm
             returnArm();
         }
-        if (timer.seconds() > 0.5 && returning){
+        if (timer.seconds() > 0.5 && returning && !capstone){
+            clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
-            stoneArm.setPosition(armIn);
             isArmOut = false;
             returning = false;
 
             timer.reset();
         }
+        else if (timer.seconds() > 1.0 && returning && capstone){
+            clawServo.setPosition(0.28);
+            liftMotor.setPower(1.0);
+            liftMoveSlightly = true;
+            isArmOut = false;
+            returning = false;
+
+            capstone = false;
+
+            timer.reset();
+        }
 
         if (timer.seconds() > 0.4 && liftMoveSlightly){
+            stoneArm.setPosition(armIn);
             liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
         }
@@ -324,12 +344,12 @@ public class MasterStacker extends XModule {
             toggleClaw();
         }
 
-        //Deploy capstone only if it is 5 seconds until endgame. This prevents accidentally dropping the capstone before endgame
+        //Deploy capstone only if it is 10 seconds until endgame. This prevents accidentally dropping the capstone before endgame
         //Driver 1 can override timer by pulling both triggers at the same time
         if ((xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
             clawServo.setPosition(1.0);
         }
-        if (xGamepad2().y.wasPressed()){
+        if (xGamepad2().y.wasPressed() && capstoneTimer.seconds() > 80){
             capstone = true;
         }
         opMode.telemetry.addData("Capstone?", capstone);
