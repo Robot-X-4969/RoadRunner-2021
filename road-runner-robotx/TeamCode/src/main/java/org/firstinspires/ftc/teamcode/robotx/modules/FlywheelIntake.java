@@ -27,6 +27,7 @@ public class FlywheelIntake extends XModule {
     public boolean flyBackward = false;
 
     public double intakePower = 0.5;
+    public boolean slowIntake = false;
 
 
     public FlywheelIntake(OpMode op){super(op);}
@@ -136,9 +137,19 @@ public class FlywheelIntake extends XModule {
 
 
         //Reset intake power to 0.5 default
-        if (xGamepad2().left_stick_button.wasPressed() || xGamepad2().right_stick_button.wasPressed()){
-            intakePower = 0.5;
+        if (xGamepad2().right_stick_button.wasPressed()){
+            if (slowIntake){
+                intakePower = 0.5;
+                slowIntake = false;
+            }
+            else {
+                intakePower = 0.35;
+                slowIntake = true;
+            }
         }
+        opMode.telemetry.addLine();
+        opMode.telemetry.addData("Intake power:", intakePower);
+
 
 
         ///////////////////////Color sensing///////////////////////////////////

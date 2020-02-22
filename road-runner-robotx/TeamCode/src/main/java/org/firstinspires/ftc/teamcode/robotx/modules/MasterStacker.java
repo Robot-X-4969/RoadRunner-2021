@@ -291,27 +291,31 @@ public class MasterStacker extends XModule {
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
+            isAutoLiftMoving = true;
             isArmOut = false;
             returning = false;
+            stoneArm.setPosition(armIn);
 
             timer.reset();
         }
-        else if (timer.seconds() > 1.5 && returning && capstone){
+        else if (timer.seconds() > 2 && returning && capstone){
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
+            isAutoLiftMoving = true;
             isArmOut = false;
             returning = false;
+            stoneArm.setPosition(armIn);
 
             capstone = false;
 
             timer.reset();
         }
 
-        if (timer.seconds() > 0.5 && liftMoveSlightly){
-            stoneArm.setPosition(armIn);
-            liftMotor.setPower(-1.0);
+        if (timer.seconds() > 0.2 && liftMoveSlightly){
+            liftMotor.setPower(motorPower);
             liftMoveSlightly = false;
+            isAutoLiftMoving = false;
         }
 
         /*if (xGamepad2().a.wasPressed()){
@@ -328,7 +332,7 @@ public class MasterStacker extends XModule {
             armOut = 0.43;
         }
         else {
-            armOut = 0.015;
+            armOut = 0.013;
         }
 
         /*if(xGamepad2().dpad_left.wasPressed()){

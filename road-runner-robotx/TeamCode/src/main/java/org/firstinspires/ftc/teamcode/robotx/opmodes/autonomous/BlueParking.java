@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.robotx.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -56,6 +57,7 @@ import org.firstinspires.ftc.teamcode.robotx.modules.StoneLift;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
+@Disabled
 @Autonomous(name = "BlueParking", group = "Autonomous")
 public class BlueParking extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
