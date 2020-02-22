@@ -218,7 +218,7 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(14,42))
-                                .lineTo(new Vector2d(15, 25),
+                                .lineTo(new Vector2d(15, 24),
                                         new ConstantInterpolator(toRadians(180)))
                                 .addMarker(1.4, ()->{
                                     flywheelIntake.toggleFly();
@@ -438,11 +438,13 @@ public class SkystoneBlue extends LinearOpMode {
                 );
             }
 
-            flywheelIntake.flywheelRight.setPower(0.35);
-            flywheelIntake.flywheelLeft.setPower(0.35);
-            masterStacker.stoneArm.setPosition(0.25);
-            sleep(1000);
-            masterStacker.toggleClaw();
+
+            flywheelIntake.flywheelRight.setPower(0.38);
+            flywheelIntake.flywheelLeft.setPower(0.38);
+            masterStacker.stoneArm.setPosition(0.1);
+            sleep(1500);
+            masterStacker.toggleClaw(); //4
+            sleep(400);
             masterStacker.stoneArm.setPosition(masterStacker.armIn);
             flywheelIntake.toggleFly();
             drive.followTrajectorySync(
@@ -451,8 +453,9 @@ public class SkystoneBlue extends LinearOpMode {
                             .build()
             );
 
-
+            flywheelIntake.toggleFly();
             sleep(10000);
+
 
 
             /**Place stone on foundation**/

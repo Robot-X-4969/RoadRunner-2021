@@ -158,6 +158,7 @@ public class MasterStacker extends XModule {
             isAutoLiftMoving = false;
         } else if (liftMotor.getCurrentPosition() <= 200 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
             liftMotor.setPower(-0.007);
+            isAutoLiftMoving = false;
         } else if (!isAutoLiftMoving && !homing) {
             liftMotor.setPower(-xGamepad2().left_stick_y); // if not, just set it to the joystick value as normal
         }
@@ -295,7 +296,7 @@ public class MasterStacker extends XModule {
 
             timer.reset();
         }
-        else if (timer.seconds() > 1.0 && returning && capstone){
+        else if (timer.seconds() > 1.5 && returning && capstone){
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
@@ -307,7 +308,7 @@ public class MasterStacker extends XModule {
             timer.reset();
         }
 
-        if (timer.seconds() > 0.2 && liftMoveSlightly){
+        if (timer.seconds() > 0.5 && liftMoveSlightly){
             stoneArm.setPosition(armIn);
             liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
@@ -327,7 +328,7 @@ public class MasterStacker extends XModule {
             armOut = 0.43;
         }
         else {
-            armOut = 0.01;
+            armOut = 0.015;
         }
 
         /*if(xGamepad2().dpad_left.wasPressed()){
