@@ -194,14 +194,15 @@ public class SkystoneBlue extends LinearOpMode {
 
 
             /////////////////////Movement///////////////////////
-
+            masterStacker.stoneArm.setPosition(0.78);
+            sleep(500);
             flywheelIntake.flywheelLeft.setPower(0.5);
             sleep(300);
             flywheelIntake.flywheelLeft.setPower(-0.5);
             sleep(500);
             flywheelIntake.flywheelLeft.setPower(0);
-            //stoneArm.clawServo.setPosition(0.4);
-
+            masterStacker.clawServo.setPosition(0.4);
+            masterStacker.stoneArm.setPosition(masterStacker.armIn);
 
 
 

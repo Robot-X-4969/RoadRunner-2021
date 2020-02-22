@@ -290,7 +290,7 @@ public class SkystoneRed extends LinearOpMode {
                 //stoneArm.clawServo.setPosition(0);
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .forward(5)
+                                .forward(4)
                                 .lineTo(new Vector2d(20,20), new SplineInterpolator(toRadians(180),toRadians(0)))
                                 .build()
                         //Drive forward to pick up skystone
@@ -455,11 +455,8 @@ public class SkystoneRed extends LinearOpMode {
                             .build()
             );
 
-
+            flywheelIntake.toggleFly();
             sleep(10000);
-
-
-            /**Place stone on foundation**/
 
 
 
