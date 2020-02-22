@@ -220,8 +220,11 @@ public class SkystoneBlue extends LinearOpMode {
                                 .lineTo(new Vector2d(14,42))
                                 .lineTo(new Vector2d(15, 25),
                                         new ConstantInterpolator(toRadians(180)))
-                                .addMarker(1.7, ()->{
+                                .addMarker(1.4, ()->{
                                     flywheelIntake.toggleFly();
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(1.7, ()->{
                                     masterStacker.stoneArm.setPosition(0.96);//Move to skystone
                                     return Unit.INSTANCE;
                                 })
