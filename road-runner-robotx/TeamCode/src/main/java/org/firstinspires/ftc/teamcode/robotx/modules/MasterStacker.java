@@ -286,7 +286,7 @@ public class MasterStacker extends XModule {
         if (isArmOut && xGamepad2().a.wasReleased()){ //Once the button is released, reset the arm
             returnArm();
         }
-        if (timer.seconds() > 0.5 && returning && !capstone){
+        if (timer.seconds() > 0.3 && returning && !capstone){
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
@@ -307,7 +307,7 @@ public class MasterStacker extends XModule {
             timer.reset();
         }
 
-        if (timer.seconds() > 0.4 && liftMoveSlightly){
+        if (timer.seconds() > 0.2 && liftMoveSlightly){
             stoneArm.setPosition(armIn);
             liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
