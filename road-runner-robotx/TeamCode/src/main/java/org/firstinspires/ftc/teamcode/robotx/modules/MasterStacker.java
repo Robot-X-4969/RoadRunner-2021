@@ -349,7 +349,7 @@ public class MasterStacker extends XModule {
         if ((xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
             clawServo.setPosition(1.0);
         }
-        if (xGamepad2().y.wasPressed() && capstoneTimer.seconds() > 80){
+        if (xGamepad2().y.wasPressed()){
             capstone = true;
         }
         opMode.telemetry.addData("Capstone?", capstone);
