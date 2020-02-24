@@ -190,7 +190,18 @@ public class LoadingSideBlue extends LinearOpMode {
             //goForward(1.0,500);
             //sleep(500);
             //strafeLeft(1.0,650);
-            strafeLeft(1.0,200);
+            goForward(1.0,340);
+            sleep(28000);
+            masterStacker.stoneArm.setPosition(0.76);
+            sleep(500);
+            flywheelIntake.flywheelLeft.setPower(0.5);
+            sleep(600);
+            flywheelIntake.flywheelLeft.setPower(-0.5);
+            sleep(500);
+            flywheelIntake.flywheelLeft.setPower(0);
+            masterStacker.clawServo.setPosition(0.4);
+            masterStacker.stoneArm.setPosition(masterStacker.armIn);
+
 
 
 
