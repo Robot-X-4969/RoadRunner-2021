@@ -110,7 +110,7 @@ public class FlywheelIntake extends XModule {
          */
 
         //Toggle intake in
-        if(xGamepad2().dpad_down.wasPressed()) {
+        if(xGamepad2().dpad_down.wasPressed() || xGamepad2().right_bumper.wasPressed()) {
             toggleFly();
         }
 
@@ -126,7 +126,7 @@ public class FlywheelIntake extends XModule {
 
         //After time has expired, return intake to original direction
         //Use boolean to only do this action when we want
-        if (jiggle && timer.seconds() > .4){
+        if (jiggle && timer.seconds() > .3){
             flywheelLeft.setPower(intakePower);
             flywheelRight.setPower(intakePower);
 

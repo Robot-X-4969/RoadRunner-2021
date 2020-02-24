@@ -313,9 +313,9 @@ public class MasterStacker extends XModule {
         }
 
         if (timer.seconds() > 0.2 && liftMoveSlightly){
-            liftMotor.setPower(motorPower);
+            liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
-            isAutoLiftMoving = false;
+            isAutoLiftMoving = true;
         }
 
         /*if (xGamepad2().a.wasPressed()){
