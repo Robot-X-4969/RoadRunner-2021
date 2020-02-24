@@ -110,7 +110,7 @@ public class FlywheelIntake extends XModule {
          */
 
         //Toggle intake in
-        if(xGamepad2().dpad_down.wasPressed() || xGamepad2().right_bumper.wasPressed()) {
+        if(xGamepad2().dpad_down.wasPressed() || xGamepad2().a.wasReleased()) {
             toggleFly();
         }
 
@@ -147,8 +147,8 @@ public class FlywheelIntake extends XModule {
                 slowIntake = true;
             }
         }
-        opMode.telemetry.addLine();
-        opMode.telemetry.addData("Intake power:", intakePower);
+
+
 
 
 

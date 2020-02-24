@@ -248,14 +248,14 @@ public class MasterStacker extends XModule {
          */
 
         //////////////////BEGIN ARM CODE////////////////////////
-        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake){
+        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake && liftMotor.getCurrentPosition() <= 200){
             stoneArm.setPosition(0.96);
             clawOpen = false;
             autoCloseClaw();
         }
 
         //Prevent arm from automatically coming down if the claw breaks so that we can feed
-        if (xGamepad1().left_stick_button.wasPressed() && xGamepad1().right_stick_button.wasPressed()){
+        if (xGamepad1().left_stick_button.wasPressed() || xGamepad1().right_stick_button.wasPressed()){
             if (autoIntake){
                 autoIntake = false;
             }
@@ -263,6 +263,9 @@ public class MasterStacker extends XModule {
                 autoIntake = true;
             }
         }
+
+        opMode.telemetry.addLine();
+        opMode.telemetry.addData("Auto intake mode:", autoIntake);
 
         if (autoClose && timer.seconds() > 0.5){
             clawServo.setPosition(0.0);
@@ -298,7 +301,7 @@ public class MasterStacker extends XModule {
 
             timer.reset();
         }
-        else if (timer.seconds() > 2 && returning && capstone){
+        else if (timer.seconds() > 1.2 && returning && capstone){
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
