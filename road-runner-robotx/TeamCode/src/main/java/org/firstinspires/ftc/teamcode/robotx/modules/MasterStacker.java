@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotx.libraries.XModule;
+import org.openftc.revextensions2.ExpansionHubEx;
+import org.openftc.revextensions2.ExpansionHubMotor;
 
 //Combination of StoneArmServo and StoneLift
 // This is so that we can have the lift and the arm be dependent on each other for some actions
@@ -65,6 +67,10 @@ public class MasterStacker extends XModule {
     public boolean autoClose = false;
     public boolean autoIntake = true;
 
+    //Re-state motors to check current draw
+    ExpansionHubMotor left, right;
+    ExpansionHubEx expansionHub;
+
     public void init() {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
         //liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -87,6 +93,10 @@ public class MasterStacker extends XModule {
         stoneArm.setPosition(armIn);
         intakeColor = opMode.hardwareMap.get(RevColorSensorV3.class, "intakeColor");
         intakeColor.setI2cAddress(I2cAddr.create7bit(0x52)); //The REV color sensor v3 uses this address
+
+        expansionHub = opMode.hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
+        left = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelLeft");
+        right = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelRight");
     }
 
     /*public void toggleCap(){
@@ -132,6 +142,10 @@ public class MasterStacker extends XModule {
     }
 
     public void loop() {
+        //Check intake current draw
+        opMode.telemetry.addData("Left current draw:", left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        opMode.telemetry.addData("RIght current draw:", right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+
         if (magSwitch.getState()) {
             magPressed = false;
         } else {
@@ -264,7 +278,7 @@ public class MasterStacker extends XModule {
             }
         }
 
-        opMode.telemetry.addLine();
+
         opMode.telemetry.addData("Auto intake mode:", autoIntake);
 
         if (autoClose && timer.seconds() > 0.5){
