@@ -42,6 +42,8 @@ android {
         applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 19
         targetSdkVersion 28
+        multiDexEnabled true
+
 
 
         /**
