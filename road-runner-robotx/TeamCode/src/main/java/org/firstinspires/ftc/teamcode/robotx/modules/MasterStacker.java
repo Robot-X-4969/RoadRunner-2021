@@ -59,6 +59,7 @@ public class MasterStacker extends XModule {
     public boolean liftMoveSlightly = false;
 
     public boolean capstone = false;
+    public boolean speakTime = true;  //Determine whether the phone will say remaining time
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
@@ -158,8 +159,6 @@ public class MasterStacker extends XModule {
         //opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
         opMode.telemetry.addData("Lift position:", liftPos);
 
-        //opMode.telemetry.addData("Motor Power: ", liftMotor.getPower() + xGamepad2().left_stick_y + " Encoder Value: " + encoder.getCurrentPosition());
-
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
         if (!magPressed && xGamepad2().left_stick_y == 0 && !isAutoLiftMoving && !liftMoveSlightly && !homing) {
@@ -252,14 +251,6 @@ public class MasterStacker extends XModule {
         }
         opMode.telemetry.addData("Level:", level);
 
-        /*if (level >= 4){
-            levelOffset = 1870;
-        }
-        else {
-            levelOffset = 50;
-        }
-
-         */
 
         //////////////////BEGIN ARM CODE////////////////////////
         if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake && liftMotor.getCurrentPosition() <= 200){
@@ -335,16 +326,6 @@ public class MasterStacker extends XModule {
             isAutoLiftMoving = true;
         }
 
-        /*if (xGamepad2().a.wasPressed()){
-            grab();
-        }
-        if (deploy && timer.seconds() > .5){
-            deploy();
-            deploy = false;
-        }
-
-         */
-
         if (level >= 6){
             armOut = 0.43;
         }
@@ -352,28 +333,63 @@ public class MasterStacker extends XModule {
             armOut = 0.013;
         }
 
-        /*if(xGamepad2().dpad_left.wasPressed()){
-            clawServo.setPosition(0);
-            clawOpen = false;
-        }
-        if(xGamepad2().dpad_right.wasPressed()) {
-            clawServo.setPosition(0.3);
-            clawOpen = true;
-        }
-
-         */
         if (xGamepad2().x.wasPressed()){
             toggleClaw();
         }
 
         //Deploy capstone only if it is 10 seconds until endgame. This prevents accidentally dropping the capstone before endgame
         //Driver 1 can override timer by pulling both triggers at the same time
-        if ((xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
+        if ((xGamepad1().left_trigger >= 0.8 && xGamepad1().right_trigger >= 0.8)){
             clawServo.setPosition(1.0);
         }
         if (xGamepad2().y.wasPressed()){
             capstone = true;
         }
         opMode.telemetry.addData("Capstone?", capstone);
+
+        //Auto drive coach mode --> telemetry reads out times
+        opMode.telemetry.addData("Remaining time", 120 - capstoneTimer.seconds());
+
+        if (speakTime) {
+            if (capstoneTimer.seconds() == 60) {
+                opMode.telemetry.speak("1 minute remaining");
+            }
+            if (capstoneTimer.seconds() == 90) {
+                opMode.telemetry.speak("Endgame!");
+            }
+            if (capstoneTimer.seconds() == 110) {
+                opMode.telemetry.speak("10");
+            }
+            if (capstoneTimer.seconds() == 111) {
+                opMode.telemetry.speak("9");
+            }
+            if (capstoneTimer.seconds() == 112) {
+                opMode.telemetry.speak("8");
+            }
+            if (capstoneTimer.seconds() == 113) {
+                opMode.telemetry.speak("7");
+            }
+            if (capstoneTimer.seconds() == 114) {
+                opMode.telemetry.speak("6");
+            }
+            if (capstoneTimer.seconds() == 115) {
+                opMode.telemetry.speak("5");
+            }
+            if (capstoneTimer.seconds() == 116) {
+                opMode.telemetry.speak("4");
+            }
+            if (capstoneTimer.seconds() == 117) {
+                opMode.telemetry.speak("3");
+            }
+            if (capstoneTimer.seconds() == 118) {
+                opMode.telemetry.speak("2");
+            }
+            if (capstoneTimer.seconds() == 119) {
+                opMode.telemetry.speak("1");
+            }
+            if (capstoneTimer.seconds() == 120) {
+                opMode.telemetry.speak("Stop");
+            }
+        }
     }
 }
