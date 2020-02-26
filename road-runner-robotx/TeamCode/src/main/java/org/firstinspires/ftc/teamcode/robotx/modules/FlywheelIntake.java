@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotx.libraries.*;
+import org.openftc.revextensions2.ExpansionHubEx;
+import org.openftc.revextensions2.ExpansionHubMotor;
 
 public class FlywheelIntake extends XModule {
     public DcMotor flywheelLeft;
@@ -28,7 +30,11 @@ public class FlywheelIntake extends XModule {
 
     public double intakePower = 0.5;
     public boolean slowIntake = false;
+    public boolean isCurrentAdjust = false;
 
+    //Re-state motors to check current draw
+    ExpansionHubMotor left, right;
+    ExpansionHubEx expansionHub;
 
     public FlywheelIntake(OpMode op){super(op);}
 
@@ -42,6 +48,11 @@ public class FlywheelIntake extends XModule {
         intakeColor.setI2cAddress(I2cAddr.create7bit(0x52)); //The REV color sensor v3 uses this address
         setTime = System.currentTimeMillis();
 
+        expansionHub = opMode.hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
+        left = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelLeft");
+        right = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelRight");
+        expansionHub.setAllI2cBusSpeeds(ExpansionHubEx.I2cBusSpeed.FASTPLUS_1M);
+        expansionHub.setLedColor(255, 255, 255);
     }
     public void toggleFly(){
         if (isFlywheelOn){
@@ -83,12 +94,23 @@ public class FlywheelIntake extends XModule {
 
             jiggle = true;
         }
+
+    /*public void currentAdjust(){
+        flywheelRight.setPower(0);
+        flywheelLeft.setPower(intakePower);
+        isCurrentAdjust = true;
+
+        timer.reset();
+    }
+
+     */
+
     public void loop(){
         //Display intake current power
         //opMode.telemetry.addData("Intake Power: ", intakePower);
 
         //Main statement for setting the intake power
-        if (isFlywheelOn && !jiggle){
+        if (isFlywheelOn && !jiggle && !isCurrentAdjust){
             if (flyForward){
                 flywheelLeft.setPower(intakePower);
                 flywheelRight.setPower(intakePower);
@@ -97,6 +119,16 @@ public class FlywheelIntake extends XModule {
                 flywheelRight.setPower(-intakePower);
                 flywheelLeft.setPower(-intakePower);
             }
+        }
+
+        if (left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0 || right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0){
+            flywheelLeft.setPower(0.0);
+            flywheelRight.setPower(0.0);
+
+            isCurrentAdjust = true;
+        }
+        if (left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) < 1.0 && right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) < 1.0){
+            isCurrentAdjust = false;
         }
 
         //Allows for intake power adjustment by using the bumpers
@@ -110,7 +142,7 @@ public class FlywheelIntake extends XModule {
          */
 
         //Toggle intake in
-        if(xGamepad2().dpad_down.wasPressed()) {
+        if(xGamepad2().dpad_down.wasPressed() || xGamepad2().a.wasReleased()) {
             toggleFly();
         }
 
@@ -126,7 +158,7 @@ public class FlywheelIntake extends XModule {
 
         //After time has expired, return intake to original direction
         //Use boolean to only do this action when we want
-        if (jiggle && timer.seconds() > .4){
+        if (jiggle && timer.seconds() > .3){
             flywheelLeft.setPower(intakePower);
             flywheelRight.setPower(intakePower);
 
@@ -147,8 +179,8 @@ public class FlywheelIntake extends XModule {
                 slowIntake = true;
             }
         }
-        opMode.telemetry.addLine();
-        opMode.telemetry.addData("Intake power:", intakePower);
+
+
 
 
 

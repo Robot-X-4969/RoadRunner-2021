@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotx.libraries.XModule;
+import org.openftc.revextensions2.ExpansionHubEx;
+import org.openftc.revextensions2.ExpansionHubMotor;
 
 //Combination of StoneArmServo and StoneLift
 // This is so that we can have the lift and the arm be dependent on each other for some actions
@@ -57,6 +59,7 @@ public class MasterStacker extends XModule {
     public boolean liftMoveSlightly = false;
 
     public boolean capstone = false;
+    public boolean speakTime = true;  //Determine whether the phone will say remaining time
 
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
@@ -64,6 +67,10 @@ public class MasterStacker extends XModule {
     public boolean clawOpen = true;
     public boolean autoClose = false;
     public boolean autoIntake = true;
+
+    //Re-state motors to check current draw
+    ExpansionHubMotor left, right;
+    ExpansionHubEx expansionHub;
 
     public void init() {
         liftMotor = opMode.hardwareMap.dcMotor.get("liftMotor");
@@ -87,6 +94,10 @@ public class MasterStacker extends XModule {
         stoneArm.setPosition(armIn);
         intakeColor = opMode.hardwareMap.get(RevColorSensorV3.class, "intakeColor");
         intakeColor.setI2cAddress(I2cAddr.create7bit(0x52)); //The REV color sensor v3 uses this address
+
+        expansionHub = opMode.hardwareMap.get(ExpansionHubEx.class, "Expansion Hub 2");
+        left = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelLeft");
+        right = (ExpansionHubMotor) opMode.hardwareMap.dcMotor.get("flywheelRight");
     }
 
     /*public void toggleCap(){
@@ -132,6 +143,10 @@ public class MasterStacker extends XModule {
     }
 
     public void loop() {
+        //Check intake current draw
+        opMode.telemetry.addData("Left current draw:", left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+        opMode.telemetry.addData("RIght current draw:", right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS));
+
         if (magSwitch.getState()) {
             magPressed = false;
         } else {
@@ -143,8 +158,6 @@ public class MasterStacker extends XModule {
 
         //opMode.telemetry.addData("Magnetic Switch Pressed?", magPressed);
         opMode.telemetry.addData("Lift position:", liftPos);
-
-        //opMode.telemetry.addData("Motor Power: ", liftMotor.getPower() + xGamepad2().left_stick_y + " Encoder Value: " + encoder.getCurrentPosition());
 
         //check if the encoder position is greater than the starting position and that there is no power from
         //the joy sticks.
@@ -238,24 +251,16 @@ public class MasterStacker extends XModule {
         }
         opMode.telemetry.addData("Level:", level);
 
-        /*if (level >= 4){
-            levelOffset = 1870;
-        }
-        else {
-            levelOffset = 50;
-        }
-
-         */
 
         //////////////////BEGIN ARM CODE////////////////////////
-        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake){
+        if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake && liftMotor.getCurrentPosition() <= 200){
             stoneArm.setPosition(0.96);
             clawOpen = false;
             autoCloseClaw();
         }
 
         //Prevent arm from automatically coming down if the claw breaks so that we can feed
-        if (xGamepad1().left_stick_button.wasPressed() && xGamepad1().right_stick_button.wasPressed()){
+        if (xGamepad1().left_stick_button.wasPressed() || xGamepad1().right_stick_button.wasPressed()){
             if (autoIntake){
                 autoIntake = false;
             }
@@ -263,6 +268,9 @@ public class MasterStacker extends XModule {
                 autoIntake = true;
             }
         }
+
+
+        opMode.telemetry.addData("Auto intake mode:", autoIntake);
 
         if (autoClose && timer.seconds() > 0.5){
             clawServo.setPosition(0.0);
@@ -298,7 +306,7 @@ public class MasterStacker extends XModule {
 
             timer.reset();
         }
-        else if (timer.seconds() > 2 && returning && capstone){
+        else if (timer.seconds() > 1.2 && returning && capstone){
             clawServo.setPosition(0.28);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
@@ -313,20 +321,10 @@ public class MasterStacker extends XModule {
         }
 
         if (timer.seconds() > 0.2 && liftMoveSlightly){
-            liftMotor.setPower(motorPower);
+            liftMotor.setPower(-1.0);
             liftMoveSlightly = false;
-            isAutoLiftMoving = false;
+            isAutoLiftMoving = true;
         }
-
-        /*if (xGamepad2().a.wasPressed()){
-            grab();
-        }
-        if (deploy && timer.seconds() > .5){
-            deploy();
-            deploy = false;
-        }
-
-         */
 
         if (level >= 6){
             armOut = 0.43;
@@ -335,28 +333,63 @@ public class MasterStacker extends XModule {
             armOut = 0.013;
         }
 
-        /*if(xGamepad2().dpad_left.wasPressed()){
-            clawServo.setPosition(0);
-            clawOpen = false;
-        }
-        if(xGamepad2().dpad_right.wasPressed()) {
-            clawServo.setPosition(0.3);
-            clawOpen = true;
-        }
-
-         */
         if (xGamepad2().x.wasPressed()){
             toggleClaw();
         }
 
         //Deploy capstone only if it is 10 seconds until endgame. This prevents accidentally dropping the capstone before endgame
         //Driver 1 can override timer by pulling both triggers at the same time
-        if ((xGamepad1().left_trigger == 1.0 && xGamepad1().right_trigger == 1)){
+        if ((xGamepad1().left_trigger >= 0.8 && xGamepad1().right_trigger >= 0.8)){
             clawServo.setPosition(1.0);
         }
         if (xGamepad2().y.wasPressed()){
             capstone = true;
         }
         opMode.telemetry.addData("Capstone?", capstone);
+
+        //Auto drive coach mode --> telemetry reads out times
+        opMode.telemetry.addData("Remaining time", 120 - capstoneTimer.seconds());
+
+        if (speakTime) {
+            if (capstoneTimer.seconds() == 60) {
+                opMode.telemetry.speak("1 minute remaining");
+            }
+            if (capstoneTimer.seconds() == 90) {
+                opMode.telemetry.speak("Endgame!");
+            }
+            if (capstoneTimer.seconds() == 110) {
+                opMode.telemetry.speak("10");
+            }
+            if (capstoneTimer.seconds() == 111) {
+                opMode.telemetry.speak("9");
+            }
+            if (capstoneTimer.seconds() == 112) {
+                opMode.telemetry.speak("8");
+            }
+            if (capstoneTimer.seconds() == 113) {
+                opMode.telemetry.speak("7");
+            }
+            if (capstoneTimer.seconds() == 114) {
+                opMode.telemetry.speak("6");
+            }
+            if (capstoneTimer.seconds() == 115) {
+                opMode.telemetry.speak("5");
+            }
+            if (capstoneTimer.seconds() == 116) {
+                opMode.telemetry.speak("4");
+            }
+            if (capstoneTimer.seconds() == 117) {
+                opMode.telemetry.speak("3");
+            }
+            if (capstoneTimer.seconds() == 118) {
+                opMode.telemetry.speak("2");
+            }
+            if (capstoneTimer.seconds() == 119) {
+                opMode.telemetry.speak("1");
+            }
+            if (capstoneTimer.seconds() == 120) {
+                opMode.telemetry.speak("Stop");
+            }
+        }
     }
 }
