@@ -3,23 +3,18 @@ package org.firstinspires.ftc.teamcode.robotx.RAPS.RR.RAPS;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
-import com.acmerobotics.roadrunner.path.heading.LinearInterpolator;
 import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
+import com.acmerobotics.roadrunner.path.heading.TangentInterpolator;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.MasterStacker;
-import org.firstinspires.ftc.teamcode.robotx.modules.StoneArm;
-import org.firstinspires.ftc.teamcode.robotx.modules.StoneArmServo;
-import org.firstinspires.ftc.teamcode.robotx.modules.StoneClaw;
-import org.firstinspires.ftc.teamcode.robotx.modules.StoneLift;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -36,7 +31,7 @@ import java.util.List;
 
 import kotlin.Unit;
 
-import static java.lang.Math.*;
+import static java.lang.Math.toRadians;
 
 @Autonomous
 public class SkystoneBlue extends LinearOpMode {
@@ -138,30 +133,10 @@ public class SkystoneBlue extends LinearOpMode {
 
         **/
         //this is the main first trajectory.
-        Trajectory path1 = drive.trajectoryBuilder()
-                .strafeLeft(5)
-                .addMarker(0.2, ()->{
-                    flywheelIntake.toggleFly();
-                    return Unit.INSTANCE;
-                })
-                .lineTo(new Vector2d(21.5,30.5),
-                        new ConstantInterpolator(toRadians(140)))
-                .addMarker(2.7,()->{
-                    flywheelIntake.toggleFly();
-                    return Unit.INSTANCE;
-                })
-                .build();
+
 
         //Path 2 is the testing path, use this path to get the robot to go to a specific pos
-        Trajectory path2 = drive.trajectoryBuilder()
-                .strafeLeft(5)
-                .addMarker(0.2, ()->{
-                    flywheelIntake.toggleFly();
-                    return Unit.INSTANCE;
-                })
-                .lineTo(new Vector2d(21.5,30.5),
-                        new ConstantInterpolator(toRadians(140)))
-                .build();
+
         telemetry.addLine("Ready!");
         telemetry.update();
         waitForStart();
@@ -194,17 +169,6 @@ public class SkystoneBlue extends LinearOpMode {
 
 
             /////////////////////Movement///////////////////////
-            masterStacker.stoneArm.setPosition(0.78);
-            sleep(500);
-            flywheelIntake.flywheelLeft.setPower(0.5);
-            sleep(600);
-            flywheelIntake.flywheelLeft.setPower(-0.5);
-            sleep(500);
-            flywheelIntake.flywheelLeft.setPower(0);
-            masterStacker.clawServo.setPosition(0.4);
-            masterStacker.stoneArm.setPosition(masterStacker.armIn);
-
-
 
 
 
@@ -213,33 +177,6 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 isLeft = true;
 
-                /**Collect Skystone 1**/
-                drive.followTrajectorySync(path1);
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(14,42))
-                                .lineTo(new Vector2d(15, 24),
-                                        new ConstantInterpolator(toRadians(180)))
-                                .addMarker(1.4, ()->{
-                                    flywheelIntake.toggleFly();
-                                    return Unit.INSTANCE;
-                                })
-                                .addMarker(1.7, ()->{
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    return Unit.INSTANCE;
-                                })
-                                .build()
-                        //Drive forward to pick up skystone
-                );
-                sleep(300);
-                //masterStacker.clawServo.setPosition(0);
-                masterStacker.clawServo.setPosition(0);// 1.1
-
-
-
-
-
-
 
 
             }else if(valLeft >= 1 && valMid >= 1 && valRight == 0){
@@ -247,35 +184,110 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 isRight = true;
 
-
-                /**Collect Skystone 1**/
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .back(7.5)
-                                .addMarker(0.2, ()->{
-                                    flywheelIntake.toggleFly();
+                                .lineTo(new Vector2d(-3,35), new ConstantInterpolator(toRadians(30))) //go to the pre skystone pickup with an angle of 30 degrees
+                                .forward(5) //collect skystone 1
+                                .addMarker(0.1, ()->{ //after we start moving move the arm up
+                                    masterStacker.stoneArm.setPosition(0.78);
                                     return Unit.INSTANCE;
                                 })
-                                .strafeLeft(43)
+                                .addMarker(0.5, ()->{ //start the intake release routine
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(1.0, ()->{ //reverse to guarantee it gets out
+                                    flywheelIntake.flywheelLeft.setPower(-0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(1.4, ()->{ // start full intake, open claw and move arm down
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    flywheelIntake.flywheelRight.setPower(0.5);
+                                    masterStacker.clawServo.setPosition(0.4);
+                                    masterStacker.stoneArm.setPosition(masterStacker.armIn);
+                                    return Unit.INSTANCE;
+                                })
                                 .build()
                 );
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .forward(5.5)
-                                .strafeRight(17)
-                                .addMarker(1, ()->{
-                                    flywheelIntake.toggleFly();
+                                .addMarker(1,()->{
+                                    masterStacker.stoneArm.setPosition(0.96);//bring arm down
+                                    masterStacker.clawServo.setPosition(0);//close claw
                                     return Unit.INSTANCE;
                                 })
+                                //travel to the foundation midway point
+                                .splineTo(new Pose2d(-15,25,toRadians(0)), new ConstantInterpolator(toRadians(0)))
+                                .setReversed(true)
+                                .splineTo(new Pose2d(-76,38, toRadians(-90))) //turn into the foundation
                                 .build()
                 );
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                masterStacker.clawServo.setPosition(0);// 1.2
-                drive.turnSync(toRadians(170));
-                sleep(100);
-
-
-
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .addMarker(()->{
+                                    flywheelIntake.flywheelRight.setPower(0.35); //turn intake to .3 power
+                                    flywheelIntake.flywheelLeft.setPower(0.35);
+                                    masterStacker.stoneArm.setPosition(0.25); //stack stone
+                                    return Unit.INSTANCE;
+                                })
+                                .back(8) //get to a location where we can touch foundation
+                                .addMarker(new Vector2d(-76,43), ()->{
+                                    pins.deployPins();//latch onto foundation
+                                    return Unit.INSTANCE;
+                                })
+                                .splineTo(new Pose2d(-35,28)) //move foundation to stacking position under skybridge
+                        .build()
+                );
+                //////////////////Trajectory for 2nd stone/////////////////////
+                masterStacker.clawServo.setPosition(0.28); //open claw and drop stone on foundation
+                pins.deployPins(); //release foundation
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .addMarker(new Vector2d(-5,28), ()->{ //when we get to point -5,28 open the claw, brign arm down and turn on intake
+                                    masterStacker.clawServo.setPosition(0.4);
+                                    masterStacker.stoneArm.setPosition(masterStacker.armIn);
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    flywheelIntake.flywheelRight.setPower(0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .splineTo(new Pose2d(15,39), new ConstantInterpolator(toRadians(0))) //head to second skystone
+                                .forward(5) //collect second skystone
+                                .setReversed(true)
+                                .splineTo(new Pose2d(-35,28,toRadians(0)), new ConstantInterpolator(toRadians(0))) //head back to the foundation
+                                .addMarker(new Vector2d(-35,28),()->{
+                                    flywheelIntake.flywheelRight.setPower(0.35); //turn intake to .3 power
+                                    flywheelIntake.flywheelLeft.setPower(0.35);
+                                    masterStacker.stoneArm.setPosition(0.25); //stack stone
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(2.0, ()->{ //open claw after a certain amount of time, this will have to be tuned
+                                    masterStacker.clawServo.setPosition(0.28); //open claw and drop stone on foundation
+                                    return Unit.INSTANCE;
+                                })
+                        .build()
+                );
+                //////////////////Trajectory for 3rd stone/////////////////////
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .splineTo(new Pose2d(-5,45,45)) //head to 3rd stone
+                                /**May need code here to funnel the intake**/
+                                .addMarker(new Vector2d(-7,30), ()->{ //when we get to point -7,30 open the claw, bring arm down and turn on intake
+                                    masterStacker.clawServo.setPosition(0.4);
+                                    masterStacker.stoneArm.setPosition(masterStacker.armIn);
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    flywheelIntake.flywheelRight.setPower(0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .splineTo(new Pose2d(0,45,0)) //move forward some to guarantee we pickup 3rd stone
+                                .setReversed(true)//reverse reverse!
+                                .addMarker(()->{
+                                    masterStacker.clawServo.setPosition(0);
+                                    return Unit.INSTANCE;
+                                })
+                                .splineTo(new Pose2d(-35,28,0))
+                                //return to under the skybridge
+                        .build()
+                );
 
 
 
@@ -285,187 +297,23 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 isCenter = true;
 
-                /**Collect first skystone**/
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-10,30), new ConstantInterpolator(toRadians(30)))
-                                .build()
-                );
-                flywheelIntake.toggleFly();
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-4,36), new ConstantInterpolator(toRadians(35)))
-                                .addMarker(1.9, ()->{
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    return Unit.INSTANCE;
-                                })
-                                .lineTo(new Vector2d(3, 28), new SplineInterpolator(toRadians(35), toRadians(180)))
-                                .build()
-                );
-                masterStacker.clawServo.setPosition(0);// 1.3
-
-
             }
 
-
-
-
-
-
-            /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(-40,31))
-                            .lineTo(new Vector2d(-76,33), new SplineInterpolator(toRadians(180), toRadians(270)))
-                            .build()
-            );
-            //drive.turnSync(Math.toRadians(80));
-            drive.followTrajectorySync(
-                    drive.trajectoryBuilder()
-                            .back(20)
-                            .addMarker(0.83, ()->{
-                                pins.deployPins();
-                                flywheelIntake.flywheelRight.setPower(0.35);
+                            .lineTo(new Vector2d(-90,25)) //push foundation back against wall
+                            .addMarker(new Vector2d(-40,28),()->{
+                                flywheelIntake.flywheelRight.setPower(0.35); //turn intake to .3 power
                                 flywheelIntake.flywheelLeft.setPower(0.35);
-                                masterStacker.stoneArm.setPosition(0.2);
+                                masterStacker.stoneArm.setPosition(0.25); //stack stone
                                 return Unit.INSTANCE;
                             })
-                            .splineTo(new Pose2d(-45,28))
-                            .build()
+                            .addMarker(new Vector2d(-87,25),()->{
+
+                                return Unit.INSTANCE;
+                            })
+                    .build()
             );
-            //masterStacker.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //masterStacker.liftMotor.setTargetPosition(500);
-
-            pins.deployPins();
-            masterStacker.clawServo.setPosition(0.28); //2
-            sleep(200);
-            flywheelIntake.toggleFlyReverse();
-
-
-
-
-
-
-            /**Go to second skystone**/
-            if(isLeft && isCenter == false && isRight == false) {
-                telemetry.addData("Skystone 2 Position: ", "Left");
-                telemetry.update();
-
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(1, 25))
-                                .build()
-                );
-                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                //.splineTo(new Pose2d(20,35,0))
-                                .strafeLeft(13)
-                                .build()
-                );
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .forward(5)
-                                .strafeRight(13)
-                                .addMarker(1.6, () -> {
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    masterStacker.clawServo.setPosition(0);// 3.1
-                                    return Unit.INSTANCE;
-                                })
-                                .setReversed(true)
-                                .lineTo(new Vector2d(-40, 25))
-                                .lineTo(new Vector2d(-80, 20))
-                                .build()
-                );
-
-
-
-
-            }else if(isLeft == false && isCenter == false && isRight) {
-                telemetry.addData("Skystone 2 Position: ", "Right");
-                telemetry.update();
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(12.5,25))
-                                .strafeLeft(18)
-                                .build()
-                );
-                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
-                sleep(400);
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .forward(6)
-                                .strafeRight(18)
-                                .addMarker(1.9, () -> {
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    masterStacker.clawServo.setPosition(0);// 3.2
-                                    return Unit.INSTANCE;
-                                })
-                                .setReversed(true)
-                                .lineTo(new Vector2d(-40, 25))
-                                .lineTo(new Vector2d(-80, 20))
-                                .build()
-                );
-
-
-
-
-            }else if(isLeft == false && isCenter && isRight == false) {
-                telemetry.addData("Skystone 2 Position: ", "Center");
-                telemetry.update();
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(1,25), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(6.25,39), new ConstantInterpolator(toRadians(0)))
-                                .build()
-                );
-                masterStacker.stoneArm.setPosition(masterStacker.armIn);//Move to skystone
-                sleep(400);
-                drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(13,39), new ConstantInterpolator(toRadians(0)))
-                                .addMarker(2, () -> {
-                                    flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
-                                    masterStacker.clawServo.setPosition(0);// 3.3
-                                    return Unit.INSTANCE;
-                                })
-                                .strafeRight(16)
-                                .setReversed(true)
-                                .lineTo(new Vector2d(-40, 25))
-                                .lineTo(new Vector2d(-80, 20))
-                                .build()
-                );
-            }
-
-
-            flywheelIntake.flywheelRight.setPower(0.38);
-            flywheelIntake.flywheelLeft.setPower(0.38);
-            masterStacker.stoneArm.setPosition(0.1);
-            sleep(1700);
-            masterStacker.clawServo.setPosition(0.28);// 4
-            sleep(400);
-            masterStacker.stoneArm.setPosition(masterStacker.armIn);
-            flywheelIntake.toggleFly();
-            drive.followTrajectorySync(
-                    drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(-35,25), new ConstantInterpolator(Math.toRadians(0)))
-                            .build()
-            );
-
-            flywheelIntake.flywheelRight.setPower(0);
-            flywheelIntake.flywheelLeft.setPower(0);
-            sleep(10000);
-
-
-
-            /**Place stone on foundation**/
-
-
-
 
         }
     }
@@ -608,9 +456,7 @@ public class SkystoneBlue extends LinearOpMode {
 
 
     /////////////////////Controls///////////////////////
-    public void line(double xCoord, double yCoord){
 
-    }
 /**
     double getBatteryVoltage() {
         double result = Double.POSITIVE_INFINITY;
