@@ -21,8 +21,6 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimiz
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 @Config
-@Disabled
-
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {
     public static double VX_WEIGHT = 1;

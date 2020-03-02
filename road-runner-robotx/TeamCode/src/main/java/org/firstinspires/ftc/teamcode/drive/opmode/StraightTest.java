@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREV;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
+import org.opencv.core.Mat;
 
 /*
  * This is a simple routine to test translational drive capabilities.
@@ -22,7 +25,18 @@ public class StraightTest extends LinearOpMode {
         SampleMecanumDriveBase drive = new SampleMecanumDriveREVOptimized(hardwareMap);
 
         Trajectory trajectory = drive.trajectoryBuilder()
-                .forward(DISTANCE)
+                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
                 .build();
 
         waitForStart();

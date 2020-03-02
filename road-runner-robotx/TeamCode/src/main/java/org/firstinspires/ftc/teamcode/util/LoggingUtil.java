@@ -5,6 +5,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -33,8 +34,12 @@ public class LoggingUtil {
             if (logFiles == null) {
                 logFiles = new ArrayList<>();
                 buildLogList(logFiles, ROAD_RUNNER_FOLDER);
-                Collections.sort(logFiles, (lhs, rhs) ->
-                        Long.compare(lhs.lastModified(), rhs.lastModified()));
+                Collections.sort(logFiles, new Comparator<File>() {
+                    @Override
+                    public int compare(File lhs, File rhs) {
+                        return Long.compare(lhs.lastModified(), rhs.lastModified());
+                    }
+                });
             }
 
             if (logFiles.size() == 0) break;
