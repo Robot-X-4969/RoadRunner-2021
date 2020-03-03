@@ -134,7 +134,7 @@ public class ObsoleteSkystoneBlue extends LinearOpMode {
         telemetry.update();
         //HeadingInterpolator interp = new LinearInterpolator(Math.toRadians(drive.getExternalHeading()), Math.toRadians(45));
 
-    
+
 
         **/
         //this is the main first trajectory.
