@@ -180,7 +180,7 @@ public class SkystoneBlue extends LinearOpMode {
                 autonArm.OpenClaw();
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-10,26.5), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-10,27), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect skystone 1
@@ -199,7 +199,7 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.followTrajectorySync( //go to second skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(13,28), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(12,28), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect claw from position
@@ -242,6 +242,7 @@ public class SkystoneBlue extends LinearOpMode {
                 autonArm.ClawIn();
 
                 /////////////////Foundation///////////////
+                drive.turnSync(toRadians(-88));
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .back(8) //get to a location where we can touch foundation

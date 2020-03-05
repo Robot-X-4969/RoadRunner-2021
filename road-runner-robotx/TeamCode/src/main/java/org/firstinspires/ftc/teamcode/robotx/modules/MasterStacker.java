@@ -169,7 +169,7 @@ public class MasterStacker extends XModule {
             liftMotor.setPower(0.0); //If so, set the motor power to 0
             //liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             isAutoLiftMoving = false;
-        } else if (liftMotor.getCurrentPosition() <= 200 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
+        } else if (liftMotor.getCurrentPosition() <= 150 && !goingUp && xGamepad2().left_stick_y >= 0 && !magPressed && !homing) {
             liftMotor.setPower(-0.007);
             isAutoLiftMoving = false;
         } else if (!isAutoLiftMoving && !homing) {
@@ -201,19 +201,19 @@ public class MasterStacker extends XModule {
         }
 
         if (level == 1){
-            stackLevel = 490;
+            stackLevel = 510;
         }
         else if (level == 2){
-            stackLevel = 960;
+            stackLevel = 980;
         }
         else if (level == 3){
-            stackLevel = 1350;
+            stackLevel = 1370;
         }
         else if (level == 4){
             stackLevel = 1720;
         }
         else if (level == 5){
-            stackLevel = 560; //Switch arm position
+            stackLevel = 580; //Switch arm position
         }
         else if (level == 6){
             stackLevel = 960;
@@ -254,7 +254,7 @@ public class MasterStacker extends XModule {
 
         //////////////////BEGIN ARM CODE////////////////////////
         if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake && liftMotor.getCurrentPosition() <= 200){
-            stoneArm.setPosition(0.96);
+            stoneArm.setPosition(1.0);
             clawOpen = false;
             autoCloseClaw();
         }

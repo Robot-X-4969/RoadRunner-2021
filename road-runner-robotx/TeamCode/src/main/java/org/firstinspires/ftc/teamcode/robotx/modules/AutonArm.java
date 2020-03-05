@@ -47,5 +47,8 @@ public class AutonArm extends XModule {
     public void ClawIn(){ evanServo.setPosition(clawInPos); }
 
 
-    public void loop(){}
+    public void loop(){
+        dumbassServo.setPosition(armInPos);
+        evanServo.setPosition(clawInPos);
+    }
 }

@@ -18,6 +18,7 @@ public class JebediahOp extends XOpMode {
     public ContinuousServoTest continuousServoTest;
     //public ParkingSlide parkingSlide;
     public MasterStacker masterStacker;
+    public AutonArm autonArm;
 
 
     public void initModules() {
@@ -54,6 +55,9 @@ public class JebediahOp extends XOpMode {
 
         masterStacker = new MasterStacker(this);
         activeModules.add(masterStacker);
+
+        autonArm = new AutonArm(this);
+        activeModules.add(autonArm);
     }
 
 }
