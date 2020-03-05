@@ -25,18 +25,7 @@ public class StraightTest extends LinearOpMode {
         SampleMecanumDriveBase drive = new SampleMecanumDriveREVOptimized(hardwareMap);
 
         Trajectory trajectory = drive.trajectoryBuilder()
-                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(0,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,90), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(-60,0), new ConstantInterpolator(Math.toRadians(0)))
-                .lineTo(new Vector2d(0,0), new ConstantInterpolator(Math.toRadians(0)))
+                .lineTo(new Vector2d(0,48), new ConstantInterpolator(Math.toRadians(0)))
                 .build();
 
         waitForStart();

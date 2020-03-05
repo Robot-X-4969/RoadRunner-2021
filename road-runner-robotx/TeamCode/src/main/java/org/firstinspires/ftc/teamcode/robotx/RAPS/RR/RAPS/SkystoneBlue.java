@@ -180,39 +180,32 @@ public class SkystoneBlue extends LinearOpMode {
                 autonArm.OpenClaw();
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-13,28),new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-10,26.5), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect skystone 1
-                sleep(500);
+                sleep(400);
                 autonArm.CloseClaw();
-                sleep(750);
+                sleep(400);
                 autonArm.ArmUp();
                 drive.followTrajectorySync(
-                        drive.trajectoryBuilder()
+                        drive.trajectoryBuilder()//get to foundation
                                 .setReversed(true)
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(-76,29), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-82,29), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
-                autonArm.ArmStack(); //stack on foundation
-                sleep(350);
                 autonArm.OpenClaw();
-                sleep(500);
-                autonArm.ArmUp();
-                autonArm.ClawIn();
                 drive.followTrajectorySync( //go to second skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(12,28), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(13,28), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
-                autonArm.OpenClaw();
-                sleep(200);
                 autonArm.ArmDown(); //collect claw from position
-                sleep(500);
+                sleep(400);
                 autonArm.CloseClaw();
-                sleep(750);
+                sleep(400);
                 autonArm.ArmUp();
                 drive.followTrajectorySync( // head back to foundation, but the back corner, this is denoted by -90 vs 76
                         drive.trajectoryBuilder()
@@ -221,52 +214,43 @@ public class SkystoneBlue extends LinearOpMode {
                                 .lineTo(new Vector2d(-93,29), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
-                autonArm.ArmStack(); //stack stone on foundation
-                sleep(350);
                 autonArm.OpenClaw();
-                sleep(500);
-                autonArm.ArmUp();
-                autonArm.ClawIn();
-
                 /////////////////3rd skystone/////////////////
                 drive.followTrajectorySync( //go to second skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(-4,29), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-3,28), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
-                autonArm.OpenClaw();
-                sleep(200);
                 autonArm.ArmDown(); //collect claw from position
-                sleep(500);
+                sleep(400);
                 autonArm.CloseClaw();
-                sleep(750);
+                sleep(400);
                 autonArm.ArmUp();
                 drive.followTrajectorySync( // head back to foundation, but the back corner, this is denoted by -90 vs 76
                         drive.trajectoryBuilder()
                                 .setReversed(true)
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(-76,29), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-76,28.5), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmStack(); //stack stone on foundation
                 sleep(350);
                 autonArm.OpenClaw();
-                sleep(500);
+                sleep(400);
                 autonArm.ArmUp();
                 autonArm.ClawIn();
 
                 /////////////////Foundation///////////////
-                drive.turnSync(toRadians(-88));
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .back(12) //get to a location where we can touch foundation
-                                .addMarker(0.6, ()->{
+                                .back(8) //get to a location where we can touch foundation
+                                .addMarker(0.4, ()->{
                                     pins.deployPins();//latch onto foundation
                                     return Unit.INSTANCE;
                                 })
                                 .splineTo(new Pose2d(-50,20)) //move foundation to stacking position under skybridge
-                                .addMarker(3.0, ()->{
+                                .addMarker(2.5, ()->{
                                     pins.deployPins();//unlatch onto foundation
                                     return Unit.INSTANCE;
                                 })
