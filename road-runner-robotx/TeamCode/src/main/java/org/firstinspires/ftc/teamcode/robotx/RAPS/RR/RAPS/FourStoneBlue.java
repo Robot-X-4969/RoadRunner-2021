@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
@@ -32,7 +31,7 @@ import kotlin.Unit;
 import static java.lang.Math.toRadians;
 
 @Autonomous
-public class SkystoneBlue extends LinearOpMode {
+public class FourStoneBlue extends LinearOpMode {
 
 
     //0 means skystone, 1+ means yellow stone
@@ -172,7 +171,6 @@ public class SkystoneBlue extends LinearOpMode {
             /////////////////////Movement///////////////////////
 
 
-            masterStacker.stoneArm.setPosition(0.96);
 
             if(valLeft == 0 && valMid >= 1 && valRight >= 1){
                 telemetry.addData("Skystone Position: ", "Left");
@@ -181,7 +179,7 @@ public class SkystoneBlue extends LinearOpMode {
                 autonArm.OpenClaw();
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-12,27), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-12,28), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect skystone 1
@@ -200,7 +198,7 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.followTrajectorySync( //go to second skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(11,28), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(11,28.5), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect claw from position
@@ -220,7 +218,7 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.followTrajectorySync( //go to third skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(-3,28), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-3,28.5), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect claw from position
@@ -246,7 +244,7 @@ public class SkystoneBlue extends LinearOpMode {
                 drive.turnSync(toRadians(-88));
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .back(6) //get to a location where we can touch foundation
+                                .back(8) //get to a location where we can touch foundation
                                 .addMarker(0.3, ()->{
                                     pins.deployPins();//latch onto foundation
                                     return Unit.INSTANCE;
@@ -361,6 +359,7 @@ public class SkystoneBlue extends LinearOpMode {
                 telemetry.update();
                 isCenter = true;
                 autonArm.OpenClaw();
+                masterStacker.stoneArm.setPosition(masterStacker.armIn);
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-4,28), new ConstantInterpolator(toRadians(0)))
@@ -417,33 +416,71 @@ public class SkystoneBlue extends LinearOpMode {
                                 .lineTo(new Vector2d(-76,31), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
-                autonArm.ArmStack(); //stack stone on foundation
-                sleep(350);
-                autonArm.OpenClaw();
-                sleep(400);
-                autonArm.ArmUp();
-                autonArm.ClawIn();
+                autonArm.OpenClaw(); //drop third stone on foundation
 
-                /////////////////Foundation///////////////
-                drive.turnSync(toRadians(-88));
+                /////////////////Foundation And 4th stone///////////////
+
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .back(6) //get to a location where we can touch foundation
-                                .addMarker(0.3, ()->{
+                                .addMarker(0.1, ()->{ //after we start moving move the arm up
+                                    masterStacker.stoneArm.setPosition(0.78);
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(0.5, ()->{ //start the intake release routine
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(1.0, ()->{ //reverse to guarantee it gets out
+                                    flywheelIntake.flywheelLeft.setPower(-0.5);
+                                    return Unit.INSTANCE;
+                                })
+                                .addMarker(1.4, ()->{ // start full intake, open claw and move arm down
+                                    flywheelIntake.flywheelLeft.setPower(0.5);
+                                    flywheelIntake.flywheelRight.setPower(0.5);
+                                    masterStacker.clawServo.setPosition(0.4);
+                                    masterStacker.stoneArm.setPosition(masterStacker.armIn);
+                                    return Unit.INSTANCE;
+                                })
+                                .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
+                                .splineTo(new Pose2d(-2,33,0), new ConstantInterpolator(toRadians(0)))
+                                .forward(5)
+                                .addMarker(()->{ //turn off intake so we dont get wo
+                                    flywheelIntake.flywheelRight.setPower(0);
+                                    flywheelIntake.flywheelLeft.setPower(0);
+                                    return Unit.INSTANCE;
+                                })
+                                .strafeRight(5)
+                                //travel to the foundation midway point
+                                .splineTo(new Pose2d(-15,25,toRadians(0)), new ConstantInterpolator(toRadians(0)))
+                                .setReversed(true)
+                                .splineTo(new Pose2d(-76,38, toRadians(-90))) //turn into the foundation
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .addMarker(()->{
+                                    flywheelIntake.flywheelRight.setPower(0.35); //turn intake to .3 power
+                                    flywheelIntake.flywheelLeft.setPower(0.35);
+                                    masterStacker.stoneArm.setPosition(0.25); //stack stone
+                                    return Unit.INSTANCE;
+                                })
+                                .back(8) //get to a location where we can touch foundation
+                                .addMarker(new Vector2d(-76,43), ()->{
                                     pins.deployPins();//latch onto foundation
                                     return Unit.INSTANCE;
                                 })
-                                .splineTo(new Pose2d(-50,20)) //move foundation to stacking position under skybridge
+                                .splineTo(new Pose2d(-50,20)) //move foundation to stacking position in pit
                                 .addMarker(2.5, ()->{
                                     pins.deployPins();//unlatch onto foundation
                                     return Unit.INSTANCE;
                                 })
-                                .setReversed(true)
+                                .setReversed(true)// make sure it goes in build site
                                 .lineTo(new Vector2d(-87,20), new ConstantInterpolator(0))
-                                .setReversed(false)
+                                .setReversed(false) //go park
                                 .splineTo(new Pose2d(-35,26, 0), new ConstantInterpolator(0))
                                 .build()
                 );
+
                 sleep(10000);
             }
 

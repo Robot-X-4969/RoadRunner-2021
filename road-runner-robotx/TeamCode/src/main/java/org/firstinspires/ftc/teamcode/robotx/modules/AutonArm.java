@@ -11,14 +11,15 @@ public class AutonArm extends XModule {
     public Servo dumbassServo; //Reference to Daniel's 3D-printed arm
     public Servo evanServo; //Because it grabs the little children (stones)
 
-    public double armInPos = 0.05;
-    public double armCarryPos = 0.15;
-    public double armOutPos = 0.52;
-    public double armStackPos = 0.42;
+    public double armInPos = 0.97;
+    public double armCarryPos = 0.82;
+    public double armHoverPos = 0.57;
+    public double armOutPos = 0.45;
+    public double armStackPos = 0.65;
 
-    public double clawClosedPos = 0.43;
-    public double clawInPos = 0.38;
-    public double clawOpenPos = 0.68;
+    public double clawClosedPos = 0.78;
+    public double clawInPos = 0.69;
+    public double clawOpenPos = 0.94;
 
     public void init(){
         dumbassServo = opMode.hardwareMap.servo.get("dumbassServo");
@@ -29,6 +30,9 @@ public class AutonArm extends XModule {
     public void ArmStack(){ dumbassServo.setPosition(armStackPos); }
     public void ArmDown(){
         dumbassServo.setPosition(armOutPos);
+    }
+    public void ArmHover(){
+        dumbassServo.setPosition(armHoverPos);
     }
     public void ArmUp(){
         dumbassServo.setPosition(armInPos);
