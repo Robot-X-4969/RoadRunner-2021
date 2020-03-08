@@ -16,9 +16,9 @@ public class AutonArm extends XModule {
     public double armOutPos = 0.52;
     public double armStackPos = 0.42;
 
-    public double clawClosedPos = 0.43;
-    public double clawInPos = 0.38;
-    public double clawOpenPos = 0.68;
+    public double clawClosedPos = 0.08;
+    public double clawInPos = 0.0;
+    public double clawOpenPos = 0.23;
 
     public void init(){
         dumbassServo = opMode.hardwareMap.servo.get("dumbassServo");
