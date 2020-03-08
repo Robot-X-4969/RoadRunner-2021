@@ -127,6 +127,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
         pins.start();
         autonArm.start();
 
+
         /**
         telemetry.addData("Starting Side: ", "Loading/Skystone");
         telemetry.addData("Position: ","Facing back wall, Color Sensor lines up with middle of tile");
@@ -318,7 +319,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
             /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(65,25))
+                            .lineTo(new Vector2d(65,17))
                             .lineTo(new Vector2d(86,31), new SplineInterpolator(toRadians(0), toRadians(-90)))
                             .build()
             );
@@ -440,7 +441,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 })
                                 .setReversed(true)
                                 .lineTo(new Vector2d(70, 36))
-                                .lineTo(new Vector2d(105, 28))
+                                .lineTo(new Vector2d(97, 28))
                                 .build()
                 );
                 masterStacker.clawServo.setPosition(0);// 3.3
@@ -451,6 +452,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
 
             flywheelIntake.flywheelRight.setPower(0.38);
             flywheelIntake.flywheelLeft.setPower(0.38);
+            sleep(250);
             masterStacker.stoneArm.setPosition(0.1);
             sleep(1700);
             masterStacker.clawServo.setPosition(0.28); //4
@@ -459,7 +461,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
             flywheelIntake.toggleFly();
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(55,33))
+                            .lineTo(new Vector2d(58,33))
                             .build()
             );
 
