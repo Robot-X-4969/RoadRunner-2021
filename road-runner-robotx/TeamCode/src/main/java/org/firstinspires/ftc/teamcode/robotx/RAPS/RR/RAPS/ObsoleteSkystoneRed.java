@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
+import org.firstinspires.ftc.teamcode.robotx.modules.AutonArm;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.MasterStacker;
@@ -68,6 +69,8 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
     FlywheelIntake flywheelIntake;
     MasterStacker masterStacker;
     FoundationPins pins;
+    AutonArm autonArm;
+
 
 
     @Override
@@ -115,10 +118,15 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
         pins = new FoundationPins(this);
         pins.init();
 
+        autonArm = new AutonArm(this);
+        autonArm.init();
+
 
         flywheelIntake.start();
         masterStacker.start();
         pins.start();
+        autonArm.start();
+
         /**
         telemetry.addData("Starting Side: ", "Loading/Skystone");
         telemetry.addData("Position: ","Facing back wall, Color Sensor lines up with middle of tile");
@@ -228,7 +236,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                         //Drive forward to pick up skystone
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.1
 
 
@@ -261,7 +269,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .build()
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.2
 
 
@@ -296,7 +304,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                         //Drive forward to pick up skystone
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.3
 
 
@@ -365,7 +373,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(15)
                                 .addMarker(1.6, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     masterStacker.clawServo.setPosition(0);// 3.1
                                     return Unit.INSTANCE;
                                 })
@@ -395,7 +403,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(18)
                                 .addMarker(1.7, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     masterStacker.clawServo.setPosition(0);// 3.2
                                     return Unit.INSTANCE;
                                 })
@@ -427,7 +435,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(15)
                                 .addMarker(1.5, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)

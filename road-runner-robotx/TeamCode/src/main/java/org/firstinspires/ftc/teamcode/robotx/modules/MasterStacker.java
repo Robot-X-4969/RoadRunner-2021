@@ -49,7 +49,7 @@ public class MasterStacker extends XModule {
     long setTime;
     boolean deploy = false;
 
-    public double armIn = 0.87;
+    public double armIn = 0.91;
     public double armOut = 0.01;
     public double armUp = 0.55;
 
