@@ -11,7 +11,7 @@ public class AutonArm extends XModule {
     public Servo dumbassServo; //Reference to Daniel's 3D-printed arm
     public Servo evanServo; //Because it grabs the little children (stones)
 
-    public double armInPos = 0.97;
+    public double armInPos = 0.90;
     public double armCarryPos = 0.82;
     public double armHoverPos = 0.57;
     public double armOutPos = 0.45;

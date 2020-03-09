@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotx.RAPS.RR.RAPS;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.heading.ConstantInterpolator;
+import com.acmerobotics.roadrunner.path.heading.SplineInterpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -170,6 +171,7 @@ public class FourStoneBlue extends LinearOpMode {
 
             /////////////////////Movement///////////////////////
 
+            masterStacker.stoneArm.setPosition(0.96);
 
 
             if(valLeft == 0 && valMid >= 1 && valRight >= 1){
@@ -359,7 +361,6 @@ public class FourStoneBlue extends LinearOpMode {
                 telemetry.update();
                 isCenter = true;
                 autonArm.OpenClaw();
-                masterStacker.stoneArm.setPosition(masterStacker.armIn);
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
                                 .lineTo(new Vector2d(-4,28), new ConstantInterpolator(toRadians(0)))
@@ -413,7 +414,7 @@ public class FourStoneBlue extends LinearOpMode {
                         drive.trajectoryBuilder()
                                 .setReversed(true)
                                 .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .lineTo(new Vector2d(-76,31), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-78,31), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.OpenClaw(); //drop third stone on foundation
@@ -422,10 +423,6 @@ public class FourStoneBlue extends LinearOpMode {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .addMarker(0.1, ()->{ //after we start moving move the arm up
-                                    masterStacker.stoneArm.setPosition(0.78);
-                                    return Unit.INSTANCE;
-                                })
                                 .addMarker(0.5, ()->{ //start the intake release routine
                                     flywheelIntake.flywheelLeft.setPower(0.5);
                                     return Unit.INSTANCE;
@@ -441,18 +438,26 @@ public class FourStoneBlue extends LinearOpMode {
                                     masterStacker.stoneArm.setPosition(masterStacker.armIn);
                                     return Unit.INSTANCE;
                                 })
-                                .lineTo(new Vector2d(-15,22), new ConstantInterpolator(toRadians(0)))
-                                .splineTo(new Pose2d(-2,33,0), new ConstantInterpolator(toRadians(0)))
-                                .forward(5)
-                                .addMarker(()->{ //turn off intake so we dont get wo
-                                    flywheelIntake.flywheelRight.setPower(0);
-                                    flywheelIntake.flywheelLeft.setPower(0);
+                                .lineTo(new Vector2d(-10,20), new ConstantInterpolator(toRadians(0)))
+                                .splineTo(new Pose2d(-4.5,44,0), new ConstantInterpolator(toRadians(0)))
+                                .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
+                                .forward(9)
+                                .addMarker(()->{
+                                    masterStacker.stoneArm.setPosition(1);//bring arm down
+                                    masterStacker.clawServo.setPosition(0);//close claw
                                     return Unit.INSTANCE;
                                 })
                                 .strafeRight(5)
+                        .build()
+                );
+                drive.followTrajectorySync(
+                        drive.trajectoryBuilder()
                                 //travel to the foundation midway point
-                                .splineTo(new Pose2d(-15,25,toRadians(0)), new ConstantInterpolator(toRadians(0)))
                                 .setReversed(true)
+                                .splineTo(new Pose2d(-20,22,toRadians(0)), new ConstantInterpolator(toRadians(0)))
                                 .splineTo(new Pose2d(-76,38, toRadians(-90))) //turn into the foundation
                                 .build()
                 );
@@ -465,17 +470,19 @@ public class FourStoneBlue extends LinearOpMode {
                                     return Unit.INSTANCE;
                                 })
                                 .back(8) //get to a location where we can touch foundation
-                                .addMarker(new Vector2d(-76,43), ()->{
+                                .addMarker(0.4, ()->{
                                     pins.deployPins();//latch onto foundation
+                                    masterStacker.clawServo.setPosition(0.4);//open claw
                                     return Unit.INSTANCE;
                                 })
-                                .splineTo(new Pose2d(-50,20)) //move foundation to stacking position in pit
+                                .splineTo(new Pose2d(-50,25, toRadians(0)), new SplineInterpolator(toRadians(-90), toRadians(0))) //move foundation to stacking position in pit
                                 .addMarker(2.5, ()->{
                                     pins.deployPins();//unlatch onto foundation
+                                    masterStacker.stoneArm.setPosition(0.96); //bring arm back in
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)// make sure it goes in build site
-                                .lineTo(new Vector2d(-87,20), new ConstantInterpolator(0))
+                                .lineTo(new Vector2d(-87,23), new ConstantInterpolator(0))
                                 .setReversed(false) //go park
                                 .splineTo(new Pose2d(-35,26, 0), new ConstantInterpolator(0))
                                 .build()
