@@ -49,6 +49,11 @@ public class MasterStacker extends XModule {
     long setTime;
     boolean deploy = false;
 
+    //Teleop claw positions
+    public double teleopClawOpen = 0.5;
+    public double teleopClawClosed = 0.75;
+    public double teleopCapstone = 0.0;
+
     public double armIn = 0.93;
     public double armOut = 0.01;
     public double armUp = 0.55;
@@ -64,6 +69,8 @@ public class MasterStacker extends XModule {
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime capstoneTimer = new ElapsedTime();
 
+
+    //Autonomous claw positions
     public boolean clawOpen = true;
     public boolean autoClose = false;
     public boolean autoIntake = true;
@@ -89,7 +96,7 @@ public class MasterStacker extends XModule {
         //stoneArm.setDirection(DcMotorSimple.Direction.REVERSE);
         //stoneArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         clawServo = opMode.hardwareMap.servo.get("clawServo");
-        clawServo.setPosition(0.28); //Set position to open
+        clawServo.setPosition(teleopClawOpen); //Set position to open
         setTime = System.currentTimeMillis();
         stoneArm.setPosition(armIn);
         intakeColor = opMode.hardwareMap.get(RevColorSensorV3.class, "intakeColor");
@@ -113,10 +120,10 @@ public class MasterStacker extends XModule {
 
     public void toggleClaw() {
         if (clawOpen) {
-            clawServo.setPosition(0);
+            clawServo.setPosition(teleopClawClosed);
             clawOpen = false;
         } else {
-            clawServo.setPosition(0.28);
+            clawServo.setPosition(teleopClawOpen);
             clawOpen = true;
         }
     }
@@ -124,11 +131,11 @@ public class MasterStacker extends XModule {
     public void returnArm() {
         if (isArmOut) {
             if (capstone) {
-                clawServo.setPosition(1.0);
+                clawServo.setPosition(teleopCapstone);
                 clawOpen = true;
                 returning = true;
             } else {
-                clawServo.setPosition(0.28);
+                clawServo.setPosition(teleopClawOpen);
                 clawOpen = true;
                 returning = true;
             }
@@ -272,8 +279,8 @@ public class MasterStacker extends XModule {
 
         opMode.telemetry.addData("Auto intake mode:", autoIntake);
 
-        if (autoClose && timer.seconds() > 0.5){
-            clawServo.setPosition(0.0);
+        if (autoClose && timer.seconds() > 0.2){
+            clawServo.setPosition(teleopClawClosed);
             autoClose = false;
         }
 
@@ -295,8 +302,8 @@ public class MasterStacker extends XModule {
         if (isArmOut && xGamepad2().a.wasReleased()){ //Once the button is released, reset the arm
             returnArm();
         }
-        if (timer.seconds() > 0.3 && returning && !capstone){
-            clawServo.setPosition(0.28);
+        if (timer.seconds() > 0.12 && returning && !capstone){
+            clawServo.setPosition(teleopClawOpen);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
             isAutoLiftMoving = true;
@@ -306,8 +313,8 @@ public class MasterStacker extends XModule {
 
             timer.reset();
         }
-        else if (timer.seconds() > 1.2 && returning && capstone){
-            clawServo.setPosition(0.28);
+        else if (timer.seconds() > 0.48 && returning && capstone){
+            clawServo.setPosition(teleopClawOpen);
             liftMotor.setPower(1.0);
             liftMoveSlightly = true;
             isAutoLiftMoving = true;
@@ -340,7 +347,7 @@ public class MasterStacker extends XModule {
         //Deploy capstone only if it is 10 seconds until endgame. This prevents accidentally dropping the capstone before endgame
         //Driver 1 can override timer by pulling both triggers at the same time
         if ((xGamepad1().left_trigger >= 0.8 && xGamepad1().right_trigger >= 0.8)){
-            clawServo.setPosition(1.0);
+            clawServo.setPosition(teleopCapstone);
         }
         if (xGamepad2().y.wasPressed()){
             capstone = true;
