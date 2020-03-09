@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
+import org.firstinspires.ftc.teamcode.robotx.modules.AutonArm;
 import org.firstinspires.ftc.teamcode.robotx.modules.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.robotx.modules.FoundationPins;
 import org.firstinspires.ftc.teamcode.robotx.modules.MasterStacker;
@@ -68,6 +69,8 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
     FlywheelIntake flywheelIntake;
     MasterStacker masterStacker;
     FoundationPins pins;
+    AutonArm autonArm;
+
 
 
     @Override
@@ -115,10 +118,16 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
         pins = new FoundationPins(this);
         pins.init();
 
+        autonArm = new AutonArm(this);
+        autonArm.init();
+
 
         flywheelIntake.start();
         masterStacker.start();
         pins.start();
+        autonArm.start();
+
+
         /**
         telemetry.addData("Starting Side: ", "Loading/Skystone");
         telemetry.addData("Position: ","Facing back wall, Color Sensor lines up with middle of tile");
@@ -228,7 +237,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                         //Drive forward to pick up skystone
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.1
 
 
@@ -261,7 +270,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .build()
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.2
 
 
@@ -296,7 +305,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                         //Drive forward to pick up skystone
                 );
                 flywheelIntake.toggleFly();
-                masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                 masterStacker.clawServo.setPosition(0);// 1.3
 
 
@@ -310,7 +319,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
             /**Reposition Foundation**/ //ONLY CHANGE THINGS BELOW THIS LINE
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(65,25))
+                            .lineTo(new Vector2d(65,17))
                             .lineTo(new Vector2d(86,31), new SplineInterpolator(toRadians(0), toRadians(-90)))
                             .build()
             );
@@ -365,7 +374,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(15)
                                 .addMarker(1.6, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     masterStacker.clawServo.setPosition(0);// 3.1
                                     return Unit.INSTANCE;
                                 })
@@ -395,7 +404,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(18)
                                 .addMarker(1.7, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     masterStacker.clawServo.setPosition(0);// 3.2
                                     return Unit.INSTANCE;
                                 })
@@ -427,12 +436,12 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
                                 .strafeLeft(15)
                                 .addMarker(1.5, () -> {
                                     flywheelIntake.toggleFly();
-                                    masterStacker.stoneArm.setPosition(0.96);//Move to skystone
+                                    masterStacker.stoneArm.setPosition(1.0);//Move to skystone
                                     return Unit.INSTANCE;
                                 })
                                 .setReversed(true)
                                 .lineTo(new Vector2d(70, 36))
-                                .lineTo(new Vector2d(105, 28))
+                                .lineTo(new Vector2d(97, 28))
                                 .build()
                 );
                 masterStacker.clawServo.setPosition(0);// 3.3
@@ -443,6 +452,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
 
             flywheelIntake.flywheelRight.setPower(0.38);
             flywheelIntake.flywheelLeft.setPower(0.38);
+            sleep(250);
             masterStacker.stoneArm.setPosition(0.1);
             sleep(1700);
             masterStacker.clawServo.setPosition(0.28); //4
@@ -451,7 +461,7 @@ public class ObsoleteSkystoneRed extends LinearOpMode {
             flywheelIntake.toggleFly();
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .lineTo(new Vector2d(55,33))
+                            .lineTo(new Vector2d(58,33))
                             .build()
             );
 

@@ -121,7 +121,7 @@ public class FlywheelIntake extends XModule {
             }
         }
 
-        if (left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0 || right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0){
+        /*if (left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0 || right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) > 1.0){
             flywheelLeft.setPower(0.0);
             flywheelRight.setPower(0.0);
 
@@ -130,6 +130,8 @@ public class FlywheelIntake extends XModule {
         if (left.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) < 1.0 && right.getCurrentDraw(ExpansionHubEx.CurrentDrawUnits.AMPS) < 1.0){
             isCurrentAdjust = false;
         }
+
+         */
 
         //Allows for intake power adjustment by using the bumpers
         /*if (xGamepad2().left_bumper.wasPressed() && intakePower > 0){
