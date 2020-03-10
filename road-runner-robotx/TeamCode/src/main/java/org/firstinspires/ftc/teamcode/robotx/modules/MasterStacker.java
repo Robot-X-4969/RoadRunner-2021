@@ -54,9 +54,10 @@ public class MasterStacker extends XModule {
     public double teleopClawClosed = 0.75;
     public double teleopCapstone = 0.0;
 
-    public double armIn = 0.93;
-    public double armOut = 0.01;
-    public double armUp = 0.55;
+    public double armIn = 0.13;
+    public double armOut = 1.0;
+    public double armUp = 0.37;
+    public double armOnStone = 0.0;
 
     public boolean isArmUp = false;
     public boolean isArmOut = false;
@@ -334,10 +335,10 @@ public class MasterStacker extends XModule {
         }
 
         if (level >= 6){
-            armOut = 0.43;
+            armOut = 0.55;
         }
         else {
-            armOut = 0.013;
+            armOut = 1.0;
         }
 
         if (xGamepad2().x.wasPressed()){

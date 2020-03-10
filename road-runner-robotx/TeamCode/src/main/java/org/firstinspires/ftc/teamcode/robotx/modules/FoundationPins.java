@@ -37,7 +37,20 @@ public class FoundationPins extends XModule {
     }
     public void loop(){
         if (xGamepad1().y.wasPressed()){
-            deployPins();
+            if (pinsOut){
+                pinsOut = false;
+            }
+            else {
+                pinsOut = true;
+            }
+        }
+        if (pinsOut){
+            rightPin.setPosition(rightOut);
+            leftPin.setPosition(leftOut);
+        }
+        else {
+            rightPin.setPosition(rightIn);
+            leftPin.setPosition(leftIn);
         }
     }
 }
