@@ -47,7 +47,7 @@ public class FourStoneBlue extends LinearOpMode {
 
     private static float CameraOffsetX = 0f
             / 8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private static float CameraOffsetY = 3f
+    private static float CameraOffsetY = 2f
             / 8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
     private static float[] midPos = {4f / 8f + CameraOffsetX, 4f / 8f + CameraOffsetY};//0 = col, 1 = row
