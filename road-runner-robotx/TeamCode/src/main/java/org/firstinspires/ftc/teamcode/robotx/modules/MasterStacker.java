@@ -262,7 +262,7 @@ public class MasterStacker extends XModule {
 
         //////////////////BEGIN ARM CODE////////////////////////
         if (intakeColor.red() > 1000 && intakeColor.green() > 1000 && clawOpen && autoIntake && liftMotor.getCurrentPosition() <= 200){
-            stoneArm.setPosition(1.0);
+            stoneArm.setPosition(armOnStone);
             clawOpen = false;
             autoCloseClaw();
         }
