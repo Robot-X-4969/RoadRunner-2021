@@ -171,7 +171,7 @@ public class FourStoneBlue extends LinearOpMode {
 
             /////////////////////Movement///////////////////////
 
-            masterStacker.stoneArm.setPosition(0.96);
+            masterStacker.stoneArm.setPosition(masterStacker.armIn);
 
 
             if(valLeft == 0 && valMid >= 1 && valRight >= 1){
@@ -363,7 +363,7 @@ public class FourStoneBlue extends LinearOpMode {
                 autonArm.OpenClaw();
                 drive.followTrajectorySync( //move to first skystone
                         drive.trajectoryBuilder()
-                                .lineTo(new Vector2d(-4,28), new ConstantInterpolator(toRadians(0)))
+                                .lineTo(new Vector2d(-4,27), new ConstantInterpolator(toRadians(0)))
                                 .build()
                 );
                 autonArm.ArmDown(); //collect skystone 1

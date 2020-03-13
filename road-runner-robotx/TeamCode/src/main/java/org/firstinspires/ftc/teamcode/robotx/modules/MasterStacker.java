@@ -54,8 +54,8 @@ public class MasterStacker extends XModule {
     public double teleopClawClosed = 0.75;
     public double teleopCapstone = 0.0;
 
-    public double armIn = 0.13;
-    public double armOut = 1.0;
+    public double armIn = 0.08;
+    public double armOut = 0.97;
     public double armUp = 0.37;
     public double armOnStone = 0.0;
 

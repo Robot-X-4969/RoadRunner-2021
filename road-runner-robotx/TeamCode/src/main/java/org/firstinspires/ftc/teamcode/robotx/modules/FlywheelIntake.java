@@ -173,11 +173,11 @@ public class FlywheelIntake extends XModule {
         //Reset intake power to 0.5 default
         if (xGamepad2().right_stick_button.wasPressed()){
             if (slowIntake){
-                intakePower = 0.5;
+                intakePower = 0.9;
                 slowIntake = false;
             }
             else {
-                intakePower = 0.35;
+                intakePower = 0.5;
                 slowIntake = true;
             }
         }
