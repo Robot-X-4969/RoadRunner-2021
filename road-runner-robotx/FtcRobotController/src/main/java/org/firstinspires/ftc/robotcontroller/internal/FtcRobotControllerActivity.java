@@ -256,6 +256,7 @@ public class FtcRobotControllerActivity extends Activity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    FtcDashboard.start();
 
     if (enforcePermissionValidator()) {
       return;
@@ -448,6 +449,7 @@ public class FtcRobotControllerActivity extends Activity
   protected void onDestroy() {
     super.onDestroy();
     RobotLog.vv(TAG, "onDestroy()");
+    FtcDashboard.stop();
 
     shutdownRobot();  // Ensure the robot is put away to bed
     if (callback != null) callback.close();
@@ -685,6 +687,7 @@ public class FtcRobotControllerActivity extends Activity
             }
           }
         : null);
+      FtcDashboard.attachEventLoop(eventLoop);
     }
   }
 
